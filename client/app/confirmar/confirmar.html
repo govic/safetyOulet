@@ -1,0 +1,240 @@
+<div class="alert {{error ? 'alert-danger' : 'alert-success'}}  alerta" ng-show="show_message">
+    <span>{{message}}</span>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">        
+        <div class="col-md-4">
+          <h3 ng-if="accion === 'comprar'">RESUMEN DE LA COMPRA</h3>
+          <h3 ng-if="accion === 'cotizar'">RESUMEN DE LA COTIZACIÓN</h3>
+        </div>
+        <div class="col-md-8">
+          <hr></hr>      
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <table class="table">         
+          <tr class="t-head">
+            <td>PRODUCTO</td>
+            <td></td>
+            <td ng-if="accion === 'comprar'">PRECIO UNITARIO</td>
+            <td>CANTIDAD</td>
+            <td ng-if="accion === 'comprar'">SUBTOTAL</td>
+          </tr>          
+          <tr ng-repeat="producto in productos">
+            <td>
+              <img src="{{producto.url_imagen}}" height="70">
+            </td>
+            <td>
+              {{producto.nombre}}
+              <div ng-repeat="variante in producto.variante">
+                {{variante.nombre}}: {{variante.opcion}}
+              </div>
+            </td>                    
+            <td ng-if="accion === 'comprar'">
+              ${{producto.precio_unitario_formato}}
+            </td>
+            <td>
+             {{producto.cantidad}}
+            </td>
+            <td ng-if="accion === 'comprar'">
+              Subtotal: ${{producto.precio_total_formato}}
+            </td>                    
+          </tr>
+        </table> 
+      </div>       
+    </div> 
+    <div class="col-md-12">
+      <div ng-if="accion === 'comprar'">
+        <div class="row">
+          <div ng-show="usuario.tipo_usuario === 'persona'" class="col-md-2">
+            <h3>BOLETA </h3>
+          </div>
+          <div ng-show="usuario.tipo_usuario === 'empresa'" class="col-md-2">
+            <h3>FACTURA </h3>
+          </div>
+          <div class="col-md-10">
+            <hr></hr>      
+          </div>
+        </div>
+      </div> 
+    </div> 
+    <div class="col-md-12">
+      <div ng-if="accion === 'cotizar'">
+        <div class="row">
+          <div class="col-md-2">
+            <h3>DATOS</h3>
+          </div> 
+          <div class="col-md-10">
+            <hr></hr>      
+          </div>         
+        </div>
+      </div>  
+    </div>    
+    <div class="col-md-6">
+      <div ng-show="usuario.tipo_usuario === 'persona'">   
+        <div class="row informacion">
+          <div class="col-md-12">&nbsp;</div>
+          <div class="col-md-4">
+            <label>*R.U.N.</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.run" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Nombre Completo</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.name" class="form-control login-input">
+          </div>                    
+          <div class="col-md-4">
+            <label>*E-mail</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.email" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Teléfono</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.telefono" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Dirección</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.direccion" class="form-control login-input">
+          </div>
+          <div class="col-md-4" ng-if="accion === 'comprar'">
+            <label>*Tipo Entrega</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar'">
+            <input disabled ng-model="usuario.tipo_entrega" class="form-control login-input">
+          </div>
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Dirección Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.direccion_despacho" class="form-control login-input">
+          </div> 
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Región Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.region_despacho" class="form-control login-input">
+          </div>  
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Comuna Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.comuna_despacho" class="form-control login-input">
+          </div> 
+          <div class="col-md-4" ng-if="accion === 'comprar'">
+            <label>*Total</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar'">
+           <input disabled  ng-model="total" class="form-control login-input">
+          </div>           
+          <div class="col-md-6 col-md-offset-6">
+            <input ng-show="!loading && accion === 'comprar'" type="submit" class="btn btn-default" value="CONFIRMAR COMPRA" ng-click="checkout()">
+          </div> 
+          <div class="col-md-6 col-md-offset-6">
+            <input ng-show="!loading && accion === 'cotizar'" type="submit" class="btn btn-default" value="CONFIRMAR COTIZACIÓN" ng-click="checkout()">
+          </div> 
+          <div ng-show="loading" style="font-size: 120%;" class="text-center">
+            <i style="margin-bottom: 32px;" class="fa fa-refresh fa-spin"></i>            
+            <span>&nbsp;&nbsp;Procesando su solicitud ...</span>
+          </div>        
+        </div>
+      </div>
+
+      <div ng-show="usuario.tipo_usuario === 'empresa'">   
+        <div class="row informacion">
+          <div class="col-md-12">&nbsp;</div>
+          <div class="col-md-4">
+            <label>*R.U.T.</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.rut" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Razón Social</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.razon" class="form-control login-input">
+          </div>  
+           <div class="col-md-4">
+            <label>*Giro</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.giro" class="form-control login-input">
+          </div>                   
+          <div class="col-md-4">
+            <label>*E-mail</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.email" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Teléfono</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.telefono" class="form-control login-input">
+          </div>
+          <div class="col-md-4">
+            <label>*Dirección</label>
+          </div>
+          <div class="col-md-8">
+            <input disabled ng-model="usuario.direccion" class="form-control login-input">
+          </div>
+          <div class="col-md-4" ng-if="accion === 'comprar'">
+            <label>*Tipo Entrega</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar'">
+            <input disabled ng-model="usuario.tipo_entrega" class="form-control login-input">
+          </div>
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Dirección Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.direccion_despacho" class="form-control login-input">
+          </div> 
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Región Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.region_despacho" class="form-control login-input">
+          </div>  
+          <div class="col-md-4" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+            <label>*Comuna Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'">
+           <input disabled ng-model="usuario.comuna_despacho" class="form-control login-input">
+          </div> 
+          <div class="col-md-4" ng-if="accion === 'comprar'">
+            <label>*Total</label>
+          </div>
+          <div class="col-md-8" ng-if="accion === 'comprar'">
+           <input disabled  ng-model="total" class="form-control login-input">
+          </div>          
+          <div class="col-md-6 col-md-offset-6">
+            <input ng-show="!loading && accion === 'comprar'" type="submit" class="btn btn-default" value="CONFIRMAR COMPRA" ng-click="checkout()">
+          </div> 
+          <div class="col-md-6 col-md-offset-6">
+            <input ng-show="!loading && accion === 'cotizar'" type="submit" class="btn btn-default" value="CONFIRMAR COTIZACIÓN" ng-click="checkout()">
+          </div> 
+          <div ng-show="loading" style="font-size: 120%;" class="text-center">
+            <i style="margin-bottom: 32px;" class="fa fa-refresh fa-spin"></i>            
+            <span>&nbsp;&nbsp;Procesando su solicitud ...</span>
+          </div>      
+        </div>
+      </div>
+    </div>
+    <div ng-if="usuario.tipo_entrega === 'Tienda' && accion === 'comprar'" class="col-md-6">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3331.353237958646!2d-70.6901415!3d-33.3879474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c694d417ccdb%3A0xffcd11b206bf2e97!2sPanamericana+Norte+5151%2C+Conchal%C3%AD%2C+Regi%C3%B3n+Metropolitana!5e0!3m2!1ses-419!2scl!4v1434464280237" width="100%" height="280" frameborder="0" style="border:0"></iframe>
+    </div>
+  </div>      
+</div>

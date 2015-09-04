@@ -1,0 +1,5 @@
+<carousel interval="5000">
+	<slide ng-repeat="banner in banners_principales" active="$first">
+		<img ng-src="assets/bannerprincipal/{{banner.imagen}}"  width="100%" title="{{banner.texto_alt}}">		
+	</slide>
+</carousel>

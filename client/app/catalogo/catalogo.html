@@ -1,0 +1,104 @@
+<div class="container home">
+  <div class="row">      
+    <div class="col-md-3">
+      <ul class="rango">
+        <li>Filtrar <strong>Productos</strong></li>
+      </ul>
+      <script type="text/ng-template" id="tree_item_renderer.html">                    
+        <label class="checkbox">            
+          <input type="checkbox" ng-click="filtroChecked(data)" ng-model="data.checked">
+          <a ng-click="data.childs.length != 0 ? (data.collapse = !data.collapse) : data.collapse = true">
+            <strong style="color: #676767;cursor: pointer;">{{data.item.glosa_filtro}}</strong>
+          </a>
+        </label>
+        <ul class="odd" collapse="data.collapse" class="fitros-sidebar-tree">
+          <div style="margin-left: 10px;" class="odd" ng-repeat="data in data.childs track by $index" ng-include="'tree_item_renderer.html'">
+          </div>
+        </ul>
+      </script>
+      <ul class="categorias">
+        <li ng-repeat="data in tree track by $index" ng-include="'tree_item_renderer.html'">
+        </li>
+      </ul>
+      <ul class="categorias" ng-show="productos_filtrados.length !== 0">
+        <li>ORDENAR POR</li>
+        <li>
+          <input type="radio" name="group1" value="precio_desc" ng-model="opcion">Precio Mayor a Menor
+        </li>
+        <li>
+          <input type="radio" name="group1" value="precio_asc" ng-model="opcion">Precio Menor a Mayor
+        </li>
+      </ul>
+
+      <ul class="categorias" ng-show="productos_filtrados.length !== 0">
+        <li>PRECIO</li>            
+        <li>Mínimo: ${{min_format}}</li> 
+        <li>Máximo: ${{max_format}}</li> 
+        <div style="padding-right: 30px;">   
+          <div range-slider min="min_price" max="max_price" model-min="min" model-max="max" step="1000" on-handle-up="filtrarPrecio(productos)">
+          </div>  
+        </div>  
+      </ul>
+
+      <ul class="categorias" ng-repeat="data in atributos_mostrar track by $index" ng-show="productos_filtrados.length !== 0">
+        <li>
+          {{data.nombre_atributo | uppercase}}
+        </li>
+        <li ng-repeat="atr in data.especificacion">
+          <input type="checkbox" ng-model="ch" ng-click="checkAtributo(atr, ch)">{{atr}}
+        </li>          
+      </ul>
+    </div><!-- contenido left -->
+
+    <div class="col-md-9">
+      <div class="row right">
+        <div class="col-md-12">
+          <div class="col-md-6">
+            <ruta></ruta>
+          </div>
+          <div class="col-md-2" ng-show="productos_filtrados.length !== 0">
+            <span class="mostrar">Mostrar:</span>
+            <select selected ng-options="item for item in opciones" class="mostrar" style="width: 50px; height: 20px;" ng-change="mostrarProductos()" ng-model="numero_por_pagina">                 
+            </select>  
+          </div>
+          <div class="col-md-4" style="padding-bottom:5px;" ng-show="productos_filtrados.length !== 0">
+            <div style="float:right; margin-top: -7px;">
+              <pagination boundary-links="true" total-items="productos_precio.length" items-per-page="numero_por_pagina" ng-model="pagina_actual" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+              </pagination>
+            </div>
+          </div>
+        </div> 
+      </div>      
+      <div class="col-md-12">
+        <hr style="margin-top: 0px !important;">
+      </hr>
+      </div>
+      <div class="col-md-12">
+        <div class="row destacados" ng-show="productos_filtrados.length !== 0">
+          <div class="col-md-3 product-separation" ng-repeat="producto in productos_filtrados">
+            <producto-catalogo producto="producto"></producto-catalogo> 
+          </div>             
+        </div><!-- end productos -->
+        <div class="row destacados" ng-show="productos_filtrados.length === 0"> 
+          <div class="col-md-12" style="text-align: center">
+            <p class="bold font-130">NO EXISTEN PRODUCTOS PARA MOSTRAR</p>
+          </div>
+        </div>
+      </div> 
+      <div class="col-md-12" style="margin-top: 30px;">
+        <div class="row">              
+          <div class="col-md-3">
+            <h3>MEDIOS DE PAGO</h3>
+          </div>
+          <div class="col-md-9">
+            <hr></hr>            
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12"><img src="assets/img/banner-down3.jpg" width="100%">
+      </div>
+      <div class="col-md-12"><img src="assets/img/transbank.jpg" width="100%">
+      </div>      
+    </div><!-- end contenido right -->
+  </div>
+</div>  <!-- end container home -->

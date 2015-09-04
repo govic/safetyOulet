@@ -1,0 +1,185 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="/">
+    <title>OUTLET</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(client) app/vendor.css -->
+      <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+      <!-- endbower --> 
+    <!-- endbuild --> 
+    <!-- build:css({.tmp,client}) app/app.css -->
+    <link rel="stylesheet" href="app/app.css">
+      <!-- injector:css -->
+      <link rel="stylesheet" href="app/account/login/login.css">
+      <link rel="stylesheet" href="app/app.css">
+      <link rel="stylesheet" href="app/banner_principal_directive/banner_principal_directive.css">
+      <link rel="stylesheet" href="app/busqueda/busqueda.css">
+      <link rel="stylesheet" href="app/cambiar_contrasena/cambiar_contrasena.css">
+      <link rel="stylesheet" href="app/carro/carro.css">
+      <link rel="stylesheet" href="app/catalogo/catalogo.css">
+      <link rel="stylesheet" href="app/checkout/checkout.css">
+      <link rel="stylesheet" href="app/compra/compra.css">
+      <link rel="stylesheet" href="app/confirmar/confirmar.css">
+      <link rel="stylesheet" href="app/contacto/contacto.css">
+      <link rel="stylesheet" href="app/cotizar/cotizar.css">
+      <link rel="stylesheet" href="app/detalle/detalle.css">
+      <link rel="stylesheet" href="app/informacion/informacion.css">
+      <link rel="stylesheet" href="app/main/main.css">
+      <link rel="stylesheet" href="app/perfil/perfil.css">
+      <link rel="stylesheet" href="app/producto_catalogo/producto_catalogo.css">
+      <link rel="stylesheet" href="app/producto_directive/producto_directive.css">
+      <link rel="stylesheet" href="app/recuperar_contrasena/recuperar_contrasena.css">
+      <link rel="stylesheet" href="app/ruta/ruta.css">
+      <link rel="stylesheet" href="components/modal/modal.css">
+      <!-- endinjector -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular-rangeslider/angular.rangeSlider.css">
+    <link href="style.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">   
+
+    
+     <!-- endbuild -->
+
+
+  </head>
+  <body ng-app="pruebaAngularApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Muestra barra de navegacion -->
+    <div ng-include="'components/navbar/navbar.html'"></div>
+
+       
+    <!-- Add your site or application content here -->
+    <div ui-view=""></div>
+    
+    <!-- Muestra footer con menu -->
+    <div ng-include="'components/footer/footer.html'"></div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    
+
+   <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- build:js({client,node_modules}) app/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/angular-socket-io/socket.js"></script>
+      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/underscore/underscore.js"></script>
+      <script src="bower_components/ngstorage/ngStorage.js"></script>
+      <script src="bower_components/waypoints/waypoints.js"></script>
+      <script src="bower_components/SHA-1/sha1.js"></script>
+      <script src="bower_components/angulartics/src/angulartics.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-adobe.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-chartbeat.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-cnzz.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-flurry.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-ga.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-kissmetrics.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-mixpanel.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-piwik.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-scroll.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-segmentio.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-splunk.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-woopra.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-marketo.js"></script>
+      <script src="bower_components/angulartics/src/angulartics-intercom.js"></script>
+      <script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
+      <script src="bower_components/get-style-property/get-style-property.js"></script>
+      <script src="bower_components/get-size/get-size.js"></script>
+      <script src="bower_components/eventie/eventie.js"></script>
+      <script src="bower_components/doc-ready/doc-ready.js"></script>
+      <script src="bower_components/eventEmitter/EventEmitter.js"></script>
+      <script src="bower_components/matches-selector/matches-selector.js"></script>
+      <script src="bower_components/outlayer/item.js"></script>
+      <script src="bower_components/outlayer/outlayer.js"></script>
+      <script src="bower_components/masonry/masonry.js"></script>
+      <script src="bower_components/imagesloaded/imagesloaded.js"></script>
+      <script src="bower_components/angular-masonry/angular-masonry.js"></script>
+      <!-- endbower -->
+      <script src="bower_components/angular-rangeslider/angular.rangeSlider.js"></script>
+      <script src="socket.io-client/socket.io.js"></script>
+    <!-- endbuild -->
+    <!-- build:js({.tmp,client}) app/app.js -->
+        <script src="app/app.js"></script>
+          <!-- injector:js -->
+          <script src="app/account/account.js"></script>
+          <script src="app/account/login/login.controller.js"></script>
+          <script src="app/account/settings/settings.controller.js"></script>
+          <script src="app/account/signup/signup.controller.js"></script>
+          <script src="app/banner_principal_directive/banner_principal_directive.directive.js"></script>
+          <script src="app/busqueda/busqueda.controller.js"></script>
+          <script src="app/busqueda/busqueda.js"></script>
+          <script src="app/cambiar_contrasena/cambiar_contrasena.controller.js"></script>
+          <script src="app/cambiar_contrasena/cambiar_contrasena.js"></script>
+          <script src="app/carro/carro.controller.js"></script>
+          <script src="app/carro/carro.js"></script>
+          <script src="app/catalogo/catalogo.controller.js"></script>
+          <script src="app/catalogo/catalogo.js"></script>
+          <script src="app/checkout/checkout.controller.js"></script>
+          <script src="app/checkout/checkout.js"></script>
+          <script src="app/compra/compra.controller.js"></script>
+          <script src="app/compra/compra.js"></script>
+          <script src="app/confirmar/confirmar.controller.js"></script>
+          <script src="app/confirmar/confirmar.js"></script>
+          <script src="app/contacto/contacto.controller.js"></script>
+          <script src="app/contacto/contacto.js"></script>
+          <script src="app/cotizar/cotizar.controller.js"></script>
+          <script src="app/cotizar/cotizar.js"></script>
+          <script src="app/detalle/detalle.controller.js"></script>
+          <script src="app/detalle/detalle.js"></script>
+          <script src="app/informacion/informacion.controller.js"></script>
+          <script src="app/informacion/informacion.js"></script>
+          <script src="app/main/main.controller.js"></script>
+          <script src="app/main/main.js"></script>
+          <script src="app/perfil/perfil.controller.js"></script>
+          <script src="app/perfil/perfil.js"></script>
+          <script src="app/producto_catalogo/producto_catalogo.directive.js"></script>
+          <script src="app/producto_directive/producto_directive.directive.js"></script>
+          <script src="app/recuperar_contrasena/recuperar_contrasena.controller.js"></script>
+          <script src="app/recuperar_contrasena/recuperar_contrasena.js"></script>
+          <script src="app/ruta/ruta.directive.js"></script>
+          <script src="components/auth/auth.service.js"></script>
+          <script src="components/auth/user.service.js"></script>
+          <script src="components/footer/footer.controller.js"></script>
+          <script src="components/modal/modal.service.js"></script>
+          <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+          <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/socket/socket.service.js"></script>
+          <!-- endinjector -->
+        <!-- endbuild -->  
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-59853176-1', { 'cookieDomain': 'none' });          
+        </script> 
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
+        
+  </body>
+</html>

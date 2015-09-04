@@ -1,0 +1,12 @@
+/* Elimina etiqueta de lista */
+.fitros-sidebar-tree, .fitros-activos{
+    list-style-type: none;
+}
+
+.producto-img-medium2{
+	height: 200px;
+	
+}
+.directive-size{
+	height: 400px;
+}

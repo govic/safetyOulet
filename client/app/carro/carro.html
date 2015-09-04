@@ -1,0 +1,162 @@
+<div class="container home">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">        
+        <div class="col-md-3">
+          <h3>CARRO DE COMPRA</h3>
+        </div>
+        <div class="col-md-9">
+          <hr></hr>      
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row">
+        <table class="table" ng-show="carro.carrito_productos.length === 0">
+          <tr class="t-head">
+            <td>NO EXISTEN PRODUCTOS EN SU CARRO DE COMPRAS</td>           
+          </tr>          
+        </table>
+        <table class="table" ng-show="carro.carrito_productos.length !== 0">
+          <tr class="t-head">
+            <td>PRODUCTO</td>
+            <td>&nbsp;</td>
+            <td>CÓDIGO</td>
+            <td>CANTIDAD</td>
+            <td>$ UNITARIO</td>
+            <td>SUBTOTAL</td>
+            <td>BORRAR</td>
+          </tr>
+          <tr ng-repeat="producto in carro.carrito_productos">
+            <td>
+              <img src="{{producto.url_imagen}}" height="70">
+            </td>
+            <td>
+              {{producto.nombre | uppercase}}
+              <div ng-repeat="variantes in producto.variante">
+                {{variantes.nombre | uppercase}}: {{variantes.opcion | uppercase}}
+              </div>
+              <label ng-show="producto.sobrestock" style="color:red;">NO DISPONIBLE</label>
+              <label ng-show="!producto.sobrestock" style="color:green;">DISPONIBLE</label>
+            </td>
+            <td>
+              {{producto.codigo}}
+            </td>
+            <td>
+              <a href="#" style="font-size: 140%; margin-top:5px;" class="glyphicon glyphicon-collapse-down" ng-click="cambiaCantidad($index, false)"></a>
+              <input disabled type="text" ng-model="producto.cantidad" style="width: 50px !important;"/>
+              <a href="#" style="font-size: 140%; margin-top:5px;" class="glyphicon glyphicon-collapse-up" ng-click="cambiaCantidad($index, true)"></a>
+            </td>
+            <td>
+              ${{producto.precio_unitario_formato}}
+            </td>
+            <td>
+              ${{producto.precio_total_formato}}
+            </td>
+            <td>
+              <span ng-click="removeCarro(producto)" class="glyphicon glyphicon-trash"></span> 
+            </td>
+          </tr>         
+        </table>
+
+        <div class="col-md-6 col-md-offset-6 finaliza-compra" ng-show="carro.carrito_cantidad > 0 && sobrestock !== true" >
+          <input ng-click="goToCheckout()" type="submit" class="btn btn-default" value="COMPRAR">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="row">
+
+      <div class="col-md-12">
+        <div class="row">
+          
+          <div class="col-md-3">
+            <h3>MEDIOS DE PAGO</h3>
+          </div>
+
+          <div class="col-md-9">
+            <hr></hr>
+        
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <img src="assets/img/transbank.jpg" width="100%">
+      </div>
+      <div class="col-md-6" ng-repeat="banner_terciario in banners_terciarios">
+        <div class="row">
+          <div class="col-md-12 ver-mas">
+            <div class="row new-product">
+                <div class="col-md-4">
+                  <hr></hr>
+                </div>                
+                <div class="col-md-4">
+                  <span>{{banner_terciario.nombre}}</span>
+                </div>
+                <div class="col-md-4">
+                  <hr></hr>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-12 ver-mas">
+              <img src="assets/bannerprincipal/{{banner_terciario.imagen}}" alt="Sin Imagen">              
+          </div>
+        </div>
+      </div><!-- end ellas prefieren -->
+
+        <div class="col-md-12">
+            <div class="row">                        
+                <div class="col-md-5">
+                    <h3>{{primera_seccion.titulo | uppercase}}</h3>
+                </div>
+                <div class="col-md-7">
+                    <hr></hr>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row destacados">
+                <div class="col-md-3" ng-repeat="producto in primera_seccion.productos">
+                    <div class="imagen-on">
+                        <div class="product-img-container">
+                            <a href="detalle/{{producto._id}}#top">
+                                <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                            </a>
+                        </div>
+                        <div class="precio">
+                            <ul>
+                                <li>${{producto.precio_format}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="descripcion">
+                        <ul>
+                            <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                            <li>{{producto.nombre | capitalize}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!-- end seccion -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12 img-footer">
+                    <ul>
+                        <li ng-repeat="banner_secundario in banners_secundarios">
+                            <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
+                        </li>                        
+                        <li>
+                            <img src="assets/img/banner-lat5.jpg">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>        
+  </div>
+</div>  <!-- end container home -->
+ 

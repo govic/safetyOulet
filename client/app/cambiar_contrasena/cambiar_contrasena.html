@@ -1,0 +1,44 @@
+<div class="alert {{error ? 'alert-danger' : 'alert-success'}}  alerta" ng-show="show_message">
+    <span>{{message}}</span>
+</div>
+<div class="container"> 
+  <div class="row">    
+    <div class="col-md-12"> 
+      <div class="row">
+       <div class="col-md-3">
+          <h3>CAMBIAR CONTRASEÑA</h3>          
+        </div>
+        <div class="col-md-9">
+          <hr></hr>      
+        </div>        
+	  	<div class="col-md-6">
+	  		<div class="row informacion">
+		      <form name="passwordForm" novalidate ng-submit="!passwordForm.$invalid && changePassword(passwordForm)">
+		      	<div class="col-md-12">&nbsp;</div>
+		      	<div class="col-md-4">
+                  <label>*Contraseña Actual</label>
+                </div>
+                <div class="col-md-8">
+	            	<input required name="oldPassword" type="password" ng-model="user.oldPassword" ng-class="((passwordForm.$submitted) && (passwordForm.oldPassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+	            </div>	         
+	            <div class="col-md-4">
+                  <label>*Nueva Contraseña</label>
+                </div>
+                <div class="col-md-8">
+	            	<input required name="newPassword" type="password" ng-model="user.newPassword" ng-class="((passwordForm.$submitted) && (passwordForm.newPassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+	            </div>	          
+	            <div class="col-md-4">
+                  <label>*Repetir Contraseña</label>
+                </div>
+                <div class="col-md-8">
+	            	<input required name="newPassword2" type="password" ng-model="user.newPassword2" ng-class="((passwordForm.$submitted) && (passwordForm.newPassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+	            </div>
+	            <div class="col-md-6 col-md-offset-6">
+                  <input type="submit" class="btn btn-default" value="Cambiar">
+                </div>		        
+		      </form>
+		    </div>
+	    </div>
+    </div>
+  </div>
+</div>

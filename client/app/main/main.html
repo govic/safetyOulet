@@ -1,0 +1,175 @@
+<div class="alert {{error ? 'alert-danger' : 'alert-success'}} alerta" ng-if="error || exito"> 
+    {{mensaje_newsletter}}
+</div>
+<div class="container home">
+    <div class="row"> 
+        <div class="col-md-12">            
+            <banner-principal-directive banners_principales="banners_principales"/>            
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">                        
+                        <div class="col-md-5">
+                            <h3>{{primera_seccion.titulo | uppercase}}</h3>
+                        </div>
+                        <div class="col-md-7">
+                            <hr></hr>                    
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row destacados">
+                        <div class="col-md-3" ng-repeat="producto in primera_seccion.productos">
+                            <div class="imagen-on">
+                                <div class="product-img-container">
+                                    <a href="detalle/{{producto._id}}#top">
+                                        <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                                    </a>
+                                </div>
+                                <div class="precio">
+                                    <ul>
+                                        <li>${{producto.precio_format}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <ul>
+                                    <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                                    <li>{{producto.nombre | capitalize}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- end seccion -->
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row newsletter">
+                        <div class="col-md-8">
+                            <form name="newsletterForm" novalidate ng-submit="!newsletterForm.$invalid && subscribe(correo_novedades)">
+                                <h2>¿QUIERES SABER MÁS?</h2>
+                                <h3>SUBSCRÍBETE A NUESTROS NEWSLETTER</h3>
+                                <p>TE OFRECEMOS CUPONES DE DESCUENTO, INFORMACIÓN Y PROMOCIONES</p>
+                                <div>
+                                    <strong>INGRESA TU CORREO ELECTRÓNICO E INSCRÍBETE.</strong>
+                                </div>
+                                <div>
+                                    <strong>ASÍ DE FÁCIL</strong>
+                                </div>
+
+                                <input required ng-model="correo_novedades" type="text" class="form-control" placeholder="E-MAIL">
+                                <input ng-show="!loading" type="submit" class="btn btn-default" value="ENVIAR" ng-disabled="newsletterForm.$invalid">
+                                <div ng-show="loading" style="color:black; padding-top: 5px;" class="col-md-1 col-md-offset-10">
+                                    <i style="font-size: 160% !important; margin-left: 14px;" class="fa fa-refresh fa-spin fa-2x"></i>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4" style="padding-right: 0px;">
+                            <img src="assets/img/lapiz-banner.jpg" width="100%">
+                        </div>
+                    </div>
+                </div><!-- end newsletter -->
+
+                <div class="col-md-6">
+                    <div class="row">                        
+                        <div class="col-md-12">
+                            <div class="row new-product">
+                                <div class="col-md-4">
+                                    <hr></hr>
+                                </div>                                
+                                <div class="col-md-4" style="text-align: center;">
+                                    <span>{{segunda_seccion.titulo}}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <hr></hr>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="novedades">
+                            <li class="col-md-12" ng-repeat="producto in segunda_seccion.productos">
+                                <div class="row">
+                                    <div class="col-md-5 col-md-offset-1">
+                                        <div class="product-img-container2">
+                                            <a href="detalle/{{producto._id}}#top">
+                                                <img src="assets/producto/medium_{{producto.images[0]}}">
+                                            <a/>                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 section-details">
+                                        <div>
+                                            <strong>{{producto.filtros[0].glosa_filtro | uppercase}}</strong>
+                                        </div>
+                                        <div>
+                                            <span>${{producto.precio_format}}</span>
+                                        </div>
+                                        <div class="gnero">
+                                            <span>{{producto.nombre | capitalize}}</span>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- end nuevos productos -->
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row new-product">
+                                <div class="col-md-4">
+                                    <hr></hr>
+                                </div>                                
+                                <div class="col-md-4" style="text-align: center;">
+                                    <span>{{tercera_seccion.titulo}}</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <hr></hr>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="novedades">
+                            <li class="col-md-12" ng-repeat="producto in tercera_seccion.productos">
+                                <div class="row">
+                                    <div class="col-md-5 col-md-offset-1">
+                                        <div class="product-img-container2">
+                                            <a href="detalle/{{producto._id}}#top">
+                                                <img src="assets/producto/medium_{{producto.images[0]}}">
+                                            <a/>                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 section-details">
+                                        <div>
+                                            <strong>{{producto.filtros[0].glosa_filtro | uppercase}}</strong>
+                                        </div>
+                                        <div>
+                                            <span>${{producto.precio_format}}</span>
+                                        </div>
+                                        <div class="gnero">
+                                            <span>{{producto.nombre | capitalize}}</span>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </li>
+                        </ul>
+                    </div>                    
+                </div><!-- end novedades -->
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12 img-footer">
+                    <ul>
+                        <li ng-repeat="banner_secundario in banners_secundarios">
+                            <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
+                        </li>                        
+                        <li>
+                            <img src="assets/img/banner-lat5.jpg">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+                
+    </div>
+</div>  <!-- end container home -->

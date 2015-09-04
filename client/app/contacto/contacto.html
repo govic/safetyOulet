@@ -1,0 +1,102 @@
+<div ng-show="exito || error" class="col-lg-5 alert {{error ? 'alert-danger' : 'alert-success'}} alerta">{{mensaje}}
+</div>
+<div class="container home">
+    <div class="row">      
+      <div class="col-md-12">
+        <div class="row contacto">
+          <h3>CONTÁCTATE DIRECTAMENTE CON NOSOTROS</h3>
+          <form name="contactoForm" novalidate ng-submit="!contactoForm.$invalid && contact()">
+            <div class="col-md-6">
+              <input required ng-model="contacto.nombre" name="nombre" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.nombre.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="NOMBRE">
+              <input required ng-model="contacto.email" name="email" type="email" ng-class="((contactoForm.$submitted) && (contactoForm.email.$error.required || contactoForm.email.$error.email)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="E-MAIL">
+              <input required ng-model="contacto.telefono" name="telefono" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.telefono.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="TELEFONO">
+            </div>
+            <div class="col-md-3">              
+              <input required ng-model="contacto.asunto" name="asunto" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.asunto.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="MOTIVO CONTACTO">
+            </div>
+            <div class="col-md-9">
+              <textarea name="mensaje" ng-model="contacto.mensaje" required ng-class="((contactoForm.$submitted) && (contactoForm.mensaje.$error.required)) ? 'form-control contacto-textarea-wrong' : 'form-control contacto-textarea'" rows="3" placeholder="MENSAJE"></textarea>
+              <input ng-show="!loading" type="submit" class="btn btn-default" value="ENVIAR">
+              <div ng-show="loading" class="col-md-2 col-md-offset-9" style="margin-top:10px; padding-left: 75px;">
+                  <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="row">
+          <div class="col-md-6" ng-repeat="banner_terciario in banners_terciarios">
+            <div class="row">
+              <div class="col-md-12 ver-mas">
+                <div class="row new-product">
+                  <div class="col-md-4">
+                    <hr></hr>
+                  </div>                
+                  <div class="col-md-4">
+                    <span>{{banner_terciario.nombre}}</span>
+                  </div>
+                  <div class="col-md-4">
+                    <hr></hr>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 ver-mas">
+                <img src="assets/bannerprincipal/{{banner_terciario.imagen}}" alt="Sin Imagen">              
+              </div>
+            </div>
+          </div><!-- end ellas prefieren --> 
+          <div class="col-md-12">
+              <div class="row">                        
+                  <div class="col-md-5">
+                      <h3>{{primera_seccion.titulo | uppercase}}</h3>
+                  </div>
+                  <div class="col-md-7">
+                      <hr></hr>                    
+                  </div>
+              </div>
+          </div>         
+          <div class="col-md-12">
+              <div class="row destacados">
+                  <div class="col-md-3" ng-repeat="producto in primera_seccion.productos">
+                      <div class="imagen-on">
+                          <div class="product-img-container">
+                              <a href="detalle/{{producto._id}}#top">
+                                  <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                              </a>
+                          </div>
+                          <div class="precio">
+                              <ul>
+                                  <li>${{producto.precio_format}}</li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="descripcion">
+                          <ul>
+                              <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                              <li>{{producto.nombre | capitalize}}</li>
+                          </ul>
+                      </div>
+                  </div>
+              </div><!-- end seccion -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12 img-footer">
+            <ul>
+              <li ng-repeat="banner_secundario in banners_secundarios">
+                <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
+              </li>                        
+              <li>
+                <img src="assets/img/banner-lat5.jpg">
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+          
+    </div>
+  </div>  <!-- end container home -->

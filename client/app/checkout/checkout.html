@@ -1,0 +1,535 @@
+<div class="alert alert-danger alerta" ng-show="errors">
+    <span>{{mensaje_error}}</span>
+</div>
+<div class="alert alert-success alerta" ng-show="success">
+    <span>{{mensaje_exito}}</span>
+</div>
+<div ng-hide="isLoggedIn()" class="container home">
+  <div class="row">      
+    <div class="col-md-12"> 
+      <div class="row">   
+        <div class="col-md-3">
+          <h3>DATOS DE USUARIO</h3>
+        </div>
+        <div class="col-md-9">
+          <hr></hr>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="col-md-12 usuario">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Bienvenido, por favor ingrese su e-mail y clave para continuar con su compra.</p>
+            <p>Si no recuerda su clave, <a href="/recuperar_contrasena">haga click aquí.</a></p>
+          </div>            
+          <form class="col-md-12" style="margin-top: 10px;"  name="loginForm" novalidate ng-submit="!loginForm.$invalid && login(loginForm)">
+            <div class="col-md-3 col-md-offset-1">
+              <label>*EMAIL</label>
+            </div>
+            <div class="col-md-7">
+              <input type="email" required name="lemail" ng-model="user.email" ng-class="((loginForm.$submitted) && (loginForm.lemail.$error.required || loginForm.lemail.$error.email)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
+            </div>
+
+            <div class="col-md-3 col-md-offset-1">
+              <label>*CONTRASEÑA</label>
+            </div>
+            <div class="col-md-7">
+              <input type="password" required name="lpassword" ng-model="user.password" ng-class="((loginForm.$submitted) && (loginForm.lpassword.$error.required)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
+            </div>
+            <div ng-show="!loading_login" class="col-md-4 col-md-offset-8">
+              <input type="submit" class="btn btn-default" value="INGRESAR">
+            </div>
+            <div ng-show="loading_login" class="col-md-1 col-md-offset-9" style="text-align:center;" >
+              <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-12 txt"><p>Sino se encuentra registrado, por favor complete los siguientes datos.</p>
+      </div>
+      <div class="col-md-12" style="padding: 0px">
+        <div class="row informacion">
+          <h3>Registro Personas</h3>
+          <div class="col-md-12">
+            <form name="registerForm" novalidate ng-submit="!registerForm.$invalid && register(registerForm)">
+              <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+                <div class="col-md-4">
+                  <label>*Nombre Completo</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="text" ng-class="((registerForm.$submitted) && (registerForm.rname.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rname" ng-model="user_r.name_r">
+                </div>
+
+                <div class="col-md-4">
+                  <label>*Email</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="email" ng-class="((registerForm.$submitted) && (registerForm.remail.$error.required || registerForm.remail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="remail" ng-model="user_r.email_r">
+                </div>
+                <div class="col-md-4">
+                  <label>*Contraseña</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword" ng-model="user_r.password_r" ng-minlength="3">
+                </div>
+                <div class="col-md-4">
+                  <label>*Repetir contraseña</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword2" ng-model="user_r.password_r2" ng-minlength="3">
+                </div>
+                <div ng-show="!loading_register" class="col-md-6 col-md-offset-6">
+                  <input type="submit" class="btn btn-default" value="Registrarse">
+                </div>
+                <div ng-show="loading_register" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;" >
+                  <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" style="padding: 0px">
+        <div class="row informacion">
+          <h3>Registro Empresas</h3>
+          <div class="col-md-12">
+            <form name="registerEForm" novalidate ng-submit="!registerEForm.$invalid && register_e(registerEForm)">
+              <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+                <div class="col-md-4">
+                  <label>*Razón social</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="text" ng-class="((registerEForm.$submitted) && (registerEForm.rename.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rename" ng-model="user_re.name_re">
+                </div>
+                <div class="col-md-4">
+                  <label>*Email</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="email" ng-class="((registerEForm.$submitted) && (registerEForm.reemail.$error.required || registerEForm.reemail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="reemail" ng-model="user_re.email_re">
+                </div>
+                <div class="col-md-4">
+                  <label>*Contraseña</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword" ng-model="user_re.password_re" ng-minlength="3">
+                </div>
+                <div class="col-md-4">
+                  <label>*Repetir contraseña</label>
+                </div>
+                <div class="col-md-8">
+                  <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword2" ng-model="user_re.password_re2" ng-minlength="3">
+                </div>
+                <div ng-show="!loading_register_e" class="col-md-6 col-md-offset-6">
+                  <input type="submit" class="btn btn-default" value="Registrarse">
+                </div>
+                <div ng-show="loading_register_e" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;">
+                  <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div><!-- end col 1 -->
+    <div class="col-md-6">
+      <div class="col-md-12">
+        <div class="row informacion">
+          <h3 ng-if="accion === 'comprar'">Comprar sin registrarse</h3>
+          <h3 ng-if="accion === 'cotizar'">Cotizar sin registrarse</h3>
+          <div class="col-md-12">            
+            <div class="row">
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-3 col-md-offset-3">
+                <input ng-show="accion === 'comprar'" type="radio" name="group1" value="user" ng-model="tipo_usuario">
+                <label ng-show="accion === 'comprar'">Persona</label>
+              </div>
+              <div class="col-md-3">
+                <input checked type="radio" name="group1" value="enterprise" ng-model="tipo_usuario">
+                <label>Empresa</label>
+              </div>
+
+              <div ng-if="accion === 'comprar' && tipo_usuario === 'user'">
+                <form name="usuarioNoRegistradoForm" novalidate ng-submit="usuarioNoRegistradoForm.$valid && confirmar()">
+                  <div class="col-md-8 col-md-offset-4">
+                    <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
+                  </div>
+                  <div class="col-md-4">
+                    <label>*R.U.N.</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required rut ng-model="usuario.run" name="unrRut" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrRut.$error.required || usuarioNoRegistradoForm.unrRut.$error.rut)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Nombre Completo</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.name" name="unrNombre" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrNombre.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>                    
+                  <div class="col-md-4">
+                    <label>*E-mail</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="email" required ng-model="usuario.email" name="unrEmail" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrEmail.$error.required || usuarioNoRegistradoForm.unrEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Teléfono</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.telefono" name="unrTelefono" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Dirección</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.direccion" name="unrDireccion" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrDireccion.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Tipo Entrega</label>
+                  </div>
+                  <div class="col-md-8">
+                    <select type="text" required  ng-model="usuario.tipo_entrega" name="unrTipoEntrega" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrTipoEntrega.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                      <option value="Tienda">Retiro en Tienda</option>
+                      <option value="Domicilio">Despacho a Domicilio</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Dirección Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                   <input type="text" required ng-model="usuario.direccion_despacho" name="unrDireccionDespacho" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrDireccionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Region Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <select required ng-change="showComuna()" ng-model="usuario.region_despacho" ng-options ="item for item in regiones" name="unrRegionDespacho" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrRegionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+                  </div>
+                   <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Comuna Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <select required ng-change="showComuna()" ng-model="usuario.comuna_despacho" ng-options ="item for item in comunas | orderBy:'toString()'" name="unrComunaDespacho" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrComunaDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+                  </div>
+                  <div class="col-md-6 col-md-offset-6">
+                    <input type="submit" class="btn btn-default" value="Continuar">
+                  </div>
+                </form>
+              </div>
+
+              <div ng-if="tipo_usuario === 'enterprise'">
+                <form name="empresaNoRegistradaForm" novalidate ng-submit="empresaNoRegistradaForm.$valid && confirmar()">
+                  <div class="col-md-8 col-md-offset-4">
+                    <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
+                  </div>
+                  <div class="col-md-4">
+                    <label>*R.U.T.</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required rut ng-model="usuario.rut" name="enrRut" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrRut.$error.required || empresaNoRegistradaForm.enrRut.$error.rut)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Razón Social</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.razon" name="enrRazon" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrRazon.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>  
+                  <div class="col-md-4">
+                    <label>*Giro</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.giro" name="enrGiro" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrGiro.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>                   
+                  <div class="col-md-4">
+                    <label>*E-mail</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="email" required ng-model="usuario.email" name="enrEmail" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrEmail.$error.required || empresaNoRegistradaForm.enrEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Teléfono</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.telefono" name="enrTelefono" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Dirección</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" required ng-model="usuario.direccion" name="enrDireccion" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrDireccion.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4">
+                    <label>*Tipo Entrega</label>
+                  </div>
+                  <div class="col-md-8">
+                    <select type="text" required  ng-model="usuario.tipo_entrega" name="enrTipoEntrega" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrTipoEntrega.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                      <option value="Tienda">Retiro en Tienda</option>
+                      <option value="Domicilio">Despacho a Domicilio</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Dirección Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                   <input type="text" required ng-model="usuario.direccion_despacho" name="enrDireccionDespacho" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrDireccionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                  </div>
+                  <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Region Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <select required ng-change="showComuna()" ng-model="usuario.region_despacho" ng-options ="item for item in regiones" name="enrRegionDespacho" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrRegionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+                  </div>
+                   <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <label>*Comuna Despacho</label>
+                  </div>
+                  <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+                    <select required ng-change="showComuna()" ng-model="usuario.comuna_despacho" ng-options ="item for item in comunas | orderBy:'toString()'" name="enrComunaDespacho" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrComunaDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+                  </div>
+                  <div class="col-md-6 col-md-offset-6">
+                    <input type="submit" class="btn btn-default" value="Continuar">
+                  </div>
+                </form>
+              </div>
+            </div>           
+          </div>
+        </div>
+      </div>
+    </div><!-- end col 2 -->             
+  </div>
+</div>  <!-- end container home -->
+<div ng-show="isLoggedIn()" class="container">
+  <div class="row"> 
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4">
+          <h3>VERIFICAR O COMPLETAR DATOS</h3>
+        </div>          
+        <div class="col-md-8">
+          <hr></hr>      
+        </div>
+      </div>      
+    </div>
+    <div ng-if="usuario.role === 'user' && accion === 'cotizar'" class="col-md-6 col-md-offset-3">
+      <span>Usted no está autorizado a realizar cotizaciones. Estas deben solicitarse a nombre de una empresa.</span>
+    </div>
+  </div> 
+  <div class="row"> 
+    <div class="col-md-6 col-md-offset-3" ng-if="accion === 'comprar' && tipo_usuario === 'user'">
+      <div class="row informacion"> 
+        <form name="usuarioRegistradoForm" novalidate ng-submit="!usuarioRegistradoForm.$invalid && confirmar()">
+          <div class="col-md-12">&nbsp;</div>
+          <div class="col-md-8 col-md-offset-4">
+            <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
+          </div>
+          <div class="col-md-4">
+            <label>*R.U.N.</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required rut ng-model="usuario.run" name="urRut" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urRut.$error.required || usuarioRegistradoForm.urRut.$error.rut)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Nombre Completo</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.name" name="urNombre" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urNombre.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>                    
+          <div class="col-md-4">
+            <label>*E-mail</label>
+          </div>
+          <div class="col-md-8">
+            <input type="email" required ng-model="usuario.email" name="urEmail" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urEmail.$error.required || usuarioRegistradoForm.urEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Teléfono</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.telefono" name="urTelefono" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Dirección</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.direccion" name="urDireccion" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urDireccion.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div> 
+          <div class="col-md-4">
+            <label>*Tipo Entrega</label>
+          </div>
+          <div class="col-md-8">
+            <select type="text" required  ng-model="usuario.tipo_entrega" name="urTipoEntrega" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urTipoEntrega.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+              <option value="Tienda">Retiro en Tienda</option>
+              <option value="Domicilio">Despacho a Domicilio</option>
+            </select>
+          </div>
+          <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Dirección Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+           <input type="text" required ng-model="usuario.direccion_despacho" name="urDireccionDespacho" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urDireccionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Region Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <select required ng-change="showComuna()" ng-model="usuario.region_despacho" ng-options ="item for item in regiones" name="urRegionDespacho" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urRegionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+          </div>
+           <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Comuna Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <select required ng-change="showComuna()" ng-model="usuario.comuna_despacho" ng-options ="item for item in comunas | orderBy:'toString()'" name="urComunaDespacho" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urComunaDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+          </div>       
+          <div class="col-md-6 col-md-offset-6">
+            <input type="submit" class="btn btn-default" value="Continuar">
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3" ng-if="usuario.role === 'enterprise'">
+      <div class="row informacion"> 
+        <form name="empresaRegistradForm" novalidate ng-submit="empresaRegistradForm.$valid && confirmar()">
+          <div class="col-md-12">&nbsp;</div>
+          <div class="col-md-8 col-md-offset-4">
+            <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
+          </div>
+          <div class="col-md-4">
+            <label>*R.U.T.</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required rut ng-model="usuario.rut" name="erRut" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erRut.$error.required || empresaRegistradForm.erRut.$error.rut)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Razón Social</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.razon" name="erRazon" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erRazon.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>  
+          <div class="col-md-4">
+            <label>*Giro</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.giro" name="erGiro" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erGiro.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>                   
+          <div class="col-md-4">
+            <label>*E-mail</label>
+          </div>
+          <div class="col-md-8">
+            <input type="email" required ng-model="usuario.email" name="erEmail" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erEmail.$error.required || empresaRegistradForm.erEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Teléfono</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.telefono" name="erTelefono" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Dirección</label>
+          </div>
+          <div class="col-md-8">
+            <input type="text" required ng-model="usuario.direccion" name="erDireccion" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erDireccion.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4">
+            <label>*Tipo Entrega</label>
+          </div>
+          <div class="col-md-8">
+            <select type="text" required  ng-model="usuario.tipo_entrega" name="erTipoEntrega" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erTipoEntrega.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+              <option value="Tienda">Retiro en Tienda</option>
+              <option value="Domicilio">Despacho a Domicilio</option>
+            </select>
+          </div>
+          <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Dirección Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+           <input type="text" required ng-model="usuario.direccion_despacho" name="erDireccionDespacho" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erDireccionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+          </div>
+          <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Region Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <select required ng-change="showComuna()" ng-model="usuario.region_despacho" ng-options ="item for item in regiones" name="erRegionDespacho" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erRegionDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+          </div>
+           <div class="col-md-4" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <label>*Comuna Despacho</label>
+          </div>
+          <div class="col-md-8" ng-if="usuario.tipo_entrega === 'Domicilio'">
+            <select required ng-change="showComuna()" ng-model="usuario.comuna_despacho" ng-options ="item for item in comunas | orderBy:'toString()'" name="erComunaDespacho" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erComunaDespacho.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+          </div>        
+          <div class="col-md-6 col-md-offset-6">
+            <input type="submit" class="btn btn-default" value="Continuar">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="row">        
+        <div class="col-md-12">
+          <div class="row newsletter">
+            <div class="col-md-8">
+              <form name="newsletterForm" novalidate ng-submit="!newsletterForm.$invalid && subscribe(correo_novedades)">
+                <h2>¿QUIERES SABER MÁS?</h2>
+                <h3>SUBSCRÍBETE A NUESTROS NEWSLETTER</h3>
+                <p>TE OFRECEMOS CUPONES DE DESCUENTO, INFORMACIÓN Y PROMOCIONES</p>
+                <div>
+                  <strong>INGRESA TU CORREO ELECTRÓNICO E INSCRÍBETE.</strong>
+                </div>
+                <div>
+                  <strong>ASÍ DE FÁCIL</strong>
+                </div>
+
+                <input required ng-model="correo_novedades" type="text" class="form-control" placeholder="E-MAIL">
+                <input ng-show="!loading" type="submit" class="btn btn-default" value="ENVIAR" ng-disabled="newsletterForm.$invalid">
+                <div ng-show="loading" style="color:black; padding-top: 5px;" class="col-md-1 col-md-offset-10">
+                  <i style="font-size: 160% !important; margin-left: 14px;" class="fa fa-refresh fa-spin fa-2x"></i>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-4" style="padding-right: 0px;">
+              <img src="assets/img/lapiz-banner.jpg" width="100%">
+            </div>
+          </div>
+        </div><!-- end newsletter -->
+        <div class="col-md-6" ng-repeat="banner_terciario in banners_terciarios">
+          <div class="row">
+            <div class="col-md-12 ver-mas">
+              <div class="row new-product">
+                <div class="col-md-4">
+                  <hr></hr>
+                </div>                
+                <div class="col-md-4">
+                  <span>{{banner_terciario.nombre}}</span>
+                </div>
+                <div class="col-md-4">
+                  <hr></hr>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 ver-mas">
+              <img src="assets/bannerprincipal/{{banner_terciario.imagen}}" alt="Sin Imagen">              
+            </div>
+          </div>
+        </div><!-- end ellas prefieren -->
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-md-12 img-footer">
+          <ul>
+            <li ng-repeat="banner_secundario in banners_secundarios">
+              <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
+            </li>                        
+            <li>
+              <img src="assets/img/banner-lat5.jpg">
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div> 
+  </div> 
+</div> 

@@ -1,0 +1,229 @@
+<div class="alert alert-danger alerta" ng-show="(avisarmeForm.$submitted) && (avisarmeForm.avisarmeEmail.$error.required || avisarmeForm.avisarmeEmail.$error.email)">
+    <span style="font-size: 110%">Debe escribir un correo válido para realizar la suscripción.</span>
+</div>
+<div class="alert {{error ? 'alert-danger' : 'alert-success'}} alerta" ng-show="exito2 || error">
+    <span style="font-size: 110%">{{mensaje}}</span>
+</div>
+<div class="container home">
+    <div class="row">        
+        <div class="col-md-4">
+            <div class="row imagen-detalle">
+                <div class="col-md-12">
+                    <img ng-show="{{foto_principal}}" src="assets/producto/{{foto_principal}}" width="100%"/>
+                </div>
+                <div class="col-md-12">
+                    <ul class="row">
+                        <li class="col-md-4" ng-repeat="item in detalle.images">
+                            <img ng-show="{{item}}" src="assets/producto/small_{{item}}" ng-click="changePicture(item)" width="100%">                          
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="row descripcion-detalle">
+                <div class="col-md-12">
+                    <h4>{{ultimo.glosa_filtro | uppercase}}</h4> 
+                    <h2>{{detalle.nombre | uppercase}} </h2></div>
+                <div class="col-md-6">
+                    <div class="col-md-12 border-down">
+                        <h3 style="margin-top:20px;">${{precio_formato}}</h3>
+                    </div>
+                    <ul>
+                        <li>{{detalle.descripcion}}</li>                        
+                    </ul>
+                </div>                
+                <div class="col-md-6">
+                    <div class="row add">
+                        <div class="col-md-8- col-md-offset-2" style="margin-top:15px !important;">
+                            <div style="margin 10px 0px;">
+                                <form name="avisarmeForm" novalidate ng-submit="!avisarmeForm.$invalid && tellMeWhen(stocks_informar)">
+                                    <p style="font-size: 80%; margin-bottom: 10px !important;">¿Quieres que te informemos cuando haya stock? Marca los productos e ingresa tu e-mail.
+                                    </p>
+                                    <div class="col-md-8" style="padding: 0px; margin-bottom: 15px;">
+                                        <input required name="avisarmeEmail" placeholder="Ingresa aquí tu e-mail" ng-model="correo" type="email" style="width: 100%; height: 29px; padding-left: 20px; font-size: 80%; border-radius: 4px; border:none; border: 1px solid grey;" >
+                                        </input>
+                                    </div>
+                                    <div ng-show="!correo_stock_loading" class="col-md-4" style="padding-right: 0px; margin-bottom: 15px;">
+                                        <input  type="submit" class="btn btn-add" value="AVISARME">
+                                    </div>
+                                    <span class="text-center" ng-show="correo_stock_loading">
+                                        <i style="font-size: 160%; margin-left: 50px; margin-top:2px;" class="fa fa-refresh fa-spin fa-2x">
+                                        </i>
+                                    </span>
+                                </form>
+                            </div>
+                            <table class="detalle-table" ng-repeat="variante in detalle.variantes">
+                                <thead>
+                                     <tr>
+                                        <th>{{variante.nombre}}</th>
+                                        <th>C&oacute;digo</th>
+                                        <th>Stock</th>
+                                        <th>Cantidad</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="stock in detalle.stock">
+                                        <td ng-model="opciones_carro[$index]">
+                                            {{stock.combinacion[0].nombre_opcion}}
+                                        </td>
+                                        <td ng-model="elegido[$index]">
+                                            {{stock.codigo}}
+                                        </td>
+                                        <td>
+                                            <p disabled ng-show="stock.stock === 0" style="border:none; width: 15px; height: 15px; border-radius: 100%; background-color: red; margin-left: 30%; margin-top: 0px !important;"></p>
+                                            <p disabled ng-show="stock.stock !== 0" style="border:none; width: 15px; height: 15px; border-radius: 100%; background-color: green; margin-left: 30%; margin-top: 0px !important;"></p>
+                                        </td>
+                                        <td>
+                                            <input maxlength="4" value="0" ng-model="cantidad[$index]" min="0" type="number" style="width: 40px; height: 21px; color:black; font-size: 100%;"></input>
+                                        </td>
+                                        <td>
+                                            <input style="width: 12px; height: 12px;" ng-show="stock.stock === 0" ng-model="stocks_informar[$index]" type="checkbox" ></input>
+                                        </td>
+                                    </tr>
+                                </tbody>  
+                            </table>               
+                            <div ng-if="!exito && !exito5" class="col-md-6">
+                                <input ng-click="addCarro(detalle, cantidad)" type="submit" class="btn btn-add" value="AGREGAR AL CARRO">
+                            </div>
+                            <div ng-if="exito" class="col-md-12">
+                                <div class="buy-success">PRODUCTO AGREGADO AL CARRO</div>
+                            </div>
+                            <div ng-if="!exito5 && !exito" class="col-md-6">
+                                <input ng-click="cotizarEmpresa(detalle, cantidad)" type="submit" class="btn btn-add" value="COTIZAR">
+                            </div>
+                            <div ng-if="exito5" class="col-md-12">
+                                <div class="buy-success">PRODUCTO AGREGADO A LA COTIZACIÓN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">                        
+                        <div class="col-md-5">
+                            <h3>{{primera_seccion.titulo | uppercase}}</h3>
+                        </div>
+                        <div class="col-md-7">
+                            <hr></hr>                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row destacados">
+                        <div class="col-md-3" ng-repeat="producto in primera_seccion.productos">
+                            <div class="imagen-on">
+                                <div class="product-img-container">
+                                    <a href="detalle/{{producto._id}}#top">
+                                        <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                                    </a>
+                                </div>
+                                <div class="precio">
+                                    <ul>
+                                        <li>${{producto.precio_format}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <ul>
+                                    <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                                    <li>{{producto.nombre | capitalize}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- end seccion -->
+                </div>
+                <div class="col-md-12">
+                    <div class="row">                        
+                        <div class="col-md-5">
+                            <h3>{{segunda_seccion.titulo | uppercase}}</h3>
+                        </div>
+                        <div class="col-md-7">
+                            <hr></hr>                    
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row destacados">
+                        <div class="col-md-3" ng-repeat="producto in segunda_seccion.productos">
+                            <div class="imagen-on">
+                                <div class="product-img-container">
+                                    <a href="detalle/{{producto._id}}#top">
+                                        <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                                    </a>
+                                </div>
+                                <div class="precio">
+                                    <ul>
+                                        <li>${{producto.precio_format}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <ul>
+                                    <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                                    <li>{{producto.nombre | capitalize}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- end seccion -->
+                </div>
+                <div class="col-md-12">
+                    <div class="row">                        
+                        <div class="col-md-5">
+                            <h3>{{tercera_seccion.titulo | uppercase}}</h3>
+                        </div>
+                        <div class="col-md-7">
+                            <hr></hr>                    
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row destacados">
+                        <div class="col-md-3" ng-repeat="producto in tercera_seccion.productos">
+                            <div class="imagen-on">
+                                <div class="product-img-container">
+                                    <a href="detalle/{{producto._id}}#top">
+                                        <img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+                                    </a>
+                                </div>
+                                <div class="precio">
+                                    <ul>
+                                        <li>${{producto.precio_format}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <ul>
+                                    <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+                                    <li>{{producto.nombre | capitalize}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- end seccion -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12 img-footer">
+                    <ul>
+                        <li ng-repeat="banner_secundario in banners_secundarios">
+                            <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
+                        </li>                        
+                        <li>
+                            <img src="assets/img/banner-lat5.jpg">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>                
+    </div>
+</div>  <!-- end container home -->

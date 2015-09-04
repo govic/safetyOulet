@@ -1,0 +1,38 @@
+<div class="alert {{error ? 'alert-danger' : 'alert-success'}}  alerta" ng-show="show_message">
+    <span>{{message}}</span>
+</div>
+<div class="container"> 
+  <div class="row">    
+    <div class="col-md-12"> 
+      <div class="row">
+        <div class="col-md-3">
+          <h3>CAMBIAR CONTRASEÑA</h3>          
+        </div>
+        <div class="col-md-9">
+          <hr></hr>      
+        </div> 
+        <div class="col-md-6"> 
+          <div class="row informacion" style="padding: 15px;">                                       
+            <span style="font-size:80%;">Si olvidó o extravió su contraseña, simplemente ingrese su dirección e-mail abajo y le enviaremos una nueva a su casilla electrónica.</a>
+            </span>            
+    	      <form name="recoverForm" novalidate ng-submit="!recoverForm.$invalid && recoverPassword()">
+    	      	<div class="col-md-12">&nbsp;</div>
+              <div class="col-md-4">
+                <label>*E-mail</label>
+              </div>
+              <div class="col-md-8">
+                <input required name="recemail" type="email" ng-model="email" ng-class="((recoverForm.$submitted) && (recoverForm.recemail.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'"/>
+              </div>  
+  	          <div ng-show="!loading" class="col-md-6 col-md-offset-6">
+                <input type="submit" class="btn btn-default" value="Recuperar">
+              </div>  
+              <div ng-show="loading" class="col-md-1 col-md-offset-10" style="margin-bottom:17px; margin-top:8px;" >
+                <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+              </div>        
+    	      </form>
+          </div>
+        </div>
+	    </div> 
+    </div>
+  </div>
+</div>

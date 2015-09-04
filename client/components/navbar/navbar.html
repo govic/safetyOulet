@@ -1,0 +1,123 @@
+<nav class="nav nav-top" ng-controller="NavbarCtrl">
+  <div class="container">
+    <div class="row top-head">
+      <div class="col-md-2">
+        <a href="/">
+          <img src="assets/img/logo-safety.jpg" width="150" alt="Sin Imagen">
+        </a>
+      </div>
+      <div class="col-md-10">
+      </div> 
+    </div>
+    <div class="row top-head">
+      <div class="col-md-5 col-md-offset-4">
+        <div ng-show="isLoggedIn() && getCurrentUser().role === 'user'" class="col-md-12 hello">
+          <span>BIENVENIDO (A)</span> 
+          <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().name | uppercase}}</span>
+        </div> 
+        <div ng-show="isLoggedIn() && getCurrentUser().role === 'enterprise'" class="col-md-12 hello">
+          <span>BIENVENIDO (A)</span> 
+          <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().razon | uppercase}}</span>
+        </div>      
+      </div>
+      <div class="col-md-3 buscar">
+        <form class="form-inline">
+            <div class="form-group">
+              <div ng-click="pasarTags()" id="buscar-icon"><img src="assets/img/buscar.png">
+              </div>
+              <input type="text" class="form-control" ng-model="tag" id="buscar" placeholder="BUSCAR PRODUCTOS ...">
+            </div>
+          </form>
+      </div>
+    </div>
+    <div class="row top-head">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="row top-menu">
+          <div class="col-md-2">
+            <div>
+            </div>
+            <a href="/">INICIO</a>            
+          </div>
+          <div class="col-md-2">
+            <div>
+            </div>
+            <li class="dropdown">
+              <a class="dropdown-toggle" ng-click="ordenar()">PRODUCTOS
+              </a>
+              <ul class="dropdown-menu">
+                <div class="container drop-menu">              
+                  <div class="row" masonry="{ transitionDuration: '0.5s' }">
+                    <div class="col-md-2 masonry-brick" ng-repeat="categoria in categorias">
+                      <ul>
+                        <li>
+                          <a href="catalogo/{{categoria.item._id}}">{{categoria.item.glosa_filtro}}
+                          </a>
+                        </li>
+                        <li ng-repeat="cat in categoria.childs">
+                          <a href="catalogo/{{cat.item._id}}">{{cat.item.glosa_filtro}}
+                          </a>
+                        </li>                        
+                      </ul>
+                    </div>         
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 marcas-titulos">
+                      <div>ACTIVIDADES</div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div ng-repeat="actividad in actividades" class="col-md-2" style="margin-bottom: 10px;">
+                          <a href="catalogo/{{actividad._id}}">
+                            <img src="assets/banner/{{actividad.urlBanner[0]}}" width="100%" height="80px;">
+                          </a>
+                        </div>                       
+                      </div>
+                    </div>
+                    <div class="col-md-12 marcas-titulos">
+                      <div>MARCAS</div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row marcas-titulos">
+                        <div class="col-md-2" ng-repeat="marca in marcas">
+                          <div>{{marca.glosa_filtro | uppercase}}</div>                        
+                          <a href="catalogo/{{marca._id}}">
+                            <img src="assets/banner/{{marca.urlBanner[0]}}" width="100%" height="70px;">
+                          </a>
+                        </div>                        
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end drop menu -->
+              </ul>
+            </li>
+          </div>
+          <div class="col-md-2">
+            <div class="glyphicon glyphicon-envelope">
+            </div>
+            <a href="/contacto">CONTACTO</a>
+          </div>                   
+          <div class="col-md-2">
+            <div class="glyphicon glyphicon-shopping-cart">
+            </div>
+            <a href="/carro">CARRO ({{carro.carrito_cantidad}})</a>
+          </div>
+          <div class="col-md-2">
+            <div class="glyphicon glyphicon-shopping-cart">
+            </div>
+            <a href="/cotizar">COTIZACIONES ({{carro.cotizacion_cantidad}})</a>
+          </div>
+          <div ng-hide="isLoggedIn()" class="col-md-2">
+            <div class="glyphicon glyphicon-user">
+            </div>
+            <a href="/login">INICIAR SESIÓN</a>
+          </div>
+          <div ng-show="isLoggedIn()" class="col-md-2">
+            <div class="glyphicon glyphicon-user">
+            </div>
+            <a ng-click="logout()" >CERRAR SESIÓN</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

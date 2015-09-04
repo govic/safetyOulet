@@ -1,0 +1,21 @@
+
+.directive-size{
+	height: 380px;		
+}
+
+.fotoenmarcada{
+padding:0px; /* distancia entre la img y el borde */
+height: auto; /* el ancho de la img */
+max-height: 250px !important;
+position: absolute;
+  top: 35%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nombre-desc{
+width: 100% !important;
+position: absolute !important; 
+bottom: 0% !important;
+
+}

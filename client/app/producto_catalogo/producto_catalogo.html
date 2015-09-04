@@ -1,0 +1,28 @@
+<div class="detalle-producto">
+    <ul>
+       <span class="font-90">{{producto.variantes[0].nombre | capitalize}}</span>:&nbsp;<span class="font-90" ng-repeat="opcion in producto.variantes[0].valores">{{opcion.opcion}}<span class="font-90" ng-hide="$last">-</span></span>
+        <br>
+        <span style="display:inline-flex;" class="font-90">Stock:&nbsp;&nbsp; 
+          <p disabled ng-show="!producto.stock_disponible" style="border:none; width: 13px; height: 13px; border-radius: 100%; background-color: red;"></p>
+          <p disabled ng-show="producto.stock_disponible" style="border:none; width: 13px; height: 13px; border-radius: 100%; background-color: green;"></p>
+        </span>
+    </ul>
+</div>
+<div class="imagen-on">
+    <div class="product-img-container3">
+        <a href="detalle/{{producto._id}}#top">
+        	<img src="assets/producto/medium_{{producto.images[0]}}" class="img-responsive center-block">
+        </a>
+    </div>
+    <div class="precio">
+        <ul>
+            <li>${{producto.precio_formato}}</li>
+        </ul>
+    </div>
+</div>
+<div class="descripcion">
+    <ul>
+        <li>{{producto.filtros[0].glosa_filtro | uppercase}}</li>
+        <li>{{producto.nombre | capitalize}}</li>
+    </ul>
+</div>
