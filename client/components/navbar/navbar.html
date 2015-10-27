@@ -3,36 +3,21 @@
     <div class="row top-head">
       <div class="col-md-2">
         <a href="/">
-          <img src="assets/img/logo-safety.jpg" width="150" alt="Sin Imagen">
+          <img src="assets/img/Logo-safety-outlet.png" width="150" alt="Sin Imagen">
         </a>
       </div>
       <div class="col-md-10">
-      </div> 
-    </div>
-    <div class="row top-head">
-      <div class="col-md-5 col-md-offset-4">
-        <div ng-show="isLoggedIn() && getCurrentUser().role === 'user'" class="col-md-12 hello">
-          <span>BIENVENIDO (A)</span> 
-          <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().name | uppercase}}</span>
-        </div> 
-        <div ng-show="isLoggedIn() && getCurrentUser().role === 'enterprise'" class="col-md-12 hello">
-          <span>BIENVENIDO (A)</span> 
-          <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().razon | uppercase}}</span>
-        </div>      
-      </div>
-      <div class="col-md-3 buscar">
-        <form class="form-inline">
-            <div class="form-group">
-              <div ng-click="pasarTags()" id="buscar-icon"><img src="assets/img/buscar.png">
-              </div>
-              <input type="text" class="form-control" ng-model="tag" id="buscar" placeholder="BUSCAR PRODUCTOS ...">
-            </div>
-          </form>
-      </div>
-    </div>
-    <div class="row top-head">
-      <div class="col-md-10 col-md-offset-1">
         <div class="row top-menu">
+          <div class="col-md-12 text-center" style="margin-bottom:27px;">
+            <div ng-show="isLoggedIn() && getCurrentUser().role === 'user'" class="col-md-12 hello">
+              <span>BIENVENIDO (A)</span> 
+              <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().name | uppercase}}</span>
+            </div> 
+            <div ng-show="isLoggedIn() && getCurrentUser().role === 'enterprise'" class="col-md-12 hello">
+              <span>BIENVENIDO (A)</span> 
+              <span class="bold pointer" ng-click="goToProfile()">{{getCurrentUser().razon | uppercase}}</span>
+            </div>      
+          </div>
           <div class="col-md-2">
             <div>
             </div>
@@ -117,7 +102,7 @@
             <a ng-click="logout()" >CERRAR SESIÓN</a>
           </div>
         </div>
-      </div>
-    </div>
+      </div> 
+    </div>    
   </div>
 </nav>

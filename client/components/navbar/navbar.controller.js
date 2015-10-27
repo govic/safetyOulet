@@ -19,20 +19,22 @@ angular.module('pruebaAngularApp')
       $scope.show_cart = true;
     }
 
-    $scope.ordenar = function() {
-        if (!orden) {
-            console.log('aqui ordenar');
-            $rootScope.$broadcast('masonry.reload');
-            orden = true;
-        }
-    };
-
     $scope.pasarTags = function(){ 
-    console.log('pasarTags()');       
+    console.log('pasarTags()'); 
+    console.dir($scope.tag);      
       $location.path('/busqueda/' +$scope.tag);
       $scope.tag = [];
 
     };
+
+    $scope.ordenar = function() {
+      if (!orden) {
+          console.log('aqui ordenar');
+          $rootScope.$broadcast('masonry.reload');
+          orden = true;
+      }
+    };
+    
     $scope.goToProfile = function(){  
        if($cookieStore.get('token')) {
         $http.get('/api/users/me')

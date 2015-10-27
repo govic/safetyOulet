@@ -14,7 +14,7 @@ router.get('/:id/destacados', controller.getDestacadosFiltro);
 
 router.get('/actividades', controller.getActividades);
 router.get('/marcas', controller.getMarcas);
-
+router.get('/padres', controller.getFiltrosPadres);
 router.get('/pag_principal', controller.getFiltrosPrincipal);
 router.get('/', controller.index);
 router.get('/:id', controller.show);

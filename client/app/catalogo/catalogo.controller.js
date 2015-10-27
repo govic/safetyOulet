@@ -217,7 +217,7 @@ angular.module('pruebaAngularApp')
 						producto_filtrado.precio_formato = $scope.precio_formato;	
 						producto_filtrado.stock_disponible = false;
 						_.each(producto_filtrado.stock, function(stock){
-							if(stock.stock >= 0){
+							if(stock.stock > 0){
 								producto_filtrado.stock_disponible = true;
 							}
 						});					
@@ -305,6 +305,7 @@ angular.module('pruebaAngularApp')
 			var parte_ruta = data;
 			//console.dir(parte_ruta);
 			var ultimo = data;
+			$scope.ruta.push(ultimo);
 			//console.dir(parte_ruta.dependencias_filtro[0]);
 			if(parte_ruta.dependencias_filtro[0] !== null && parte_ruta.dependencias_filtro[0].es_menu_filtro === true){
 				while(parte_ruta.dependencias_filtro[0] !== null){
@@ -314,8 +315,8 @@ angular.module('pruebaAngularApp')
 					//console.dir(parte_ruta);
 				}
 			}
-			$scope.ruta.push(ultimo);
-			//console.dir($scope.ruta);
+			$scope.ruta.reverse();
+			console.dir($scope.ruta);
 		});
 
 		//obtiene productos destacados para la categoria

@@ -192,15 +192,105 @@ exports.getProductosBySeccion = function(req, res){
   }
 };
 
-exports.getProductosBusqueda = function(req, res){
+exports.getProductosBusqueda = function(req, res){ 
+  var tags_normalize = [];  
+  _.forEach(req.body.tags, function(tag){
+    console.dir(tag);
+    tags_normalize.push(tag);
+    tag = tag.toLowerCase();
+    tag = tag.replace(new RegExp(/a/g), '(a|á)');
+    tag = tag.replace(new RegExp(/e/g), '(e|é)');
+    tag = tag.replace(new RegExp(/i/g), '(i|í)');
+    tag = tag.replace(new RegExp(/o/g), '(o|ó)');
+    tag = tag.replace(new RegExp(/u/g), '(u|ú)');
+    tag = tag.replace(new RegExp(/á/g), '(a|á)');
+    tag = tag.replace(new RegExp(/é/g), '(e|é)');
+    tag = tag.replace(new RegExp(/í/g), '(i|í)');
+    tag = tag.replace(new RegExp(/ó/g), '(o|ó)');
+    tag = tag.replace(new RegExp(/ú/g), '(u|ú)');
+    //tag = tag.replace(new RegExp(/[ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñ]/g),'.');
+    console.dir(tag);
+    tags_normalize.push(tag);
+  });
+  console.dir(tags_normalize);  
+  var tags = tags_normalize.join('|');
+  var string_tags = '('+ tags + ')';
+  console.dir(string_tags);
 
-  Producto.textSearch(req.params.tag, function(err, data){
-    //captura error
-    if (err) return handleError(err);
-    //retorna resultados
-    return res.json(200, _.map(data.results, function(item){ return item.obj }));
+  Producto.find({ $or: 
+  [
+    {'tag': {$in: tags_normalize}},
+    {'nombre':  new RegExp(string_tags, 'i')},
+    {'descripcion':  new RegExp(string_tags, 'i')}   
+  ]},
+  function(err, productos){
+    if (err) { return handleError(res, req); }
+    if(!productos) { return res.send(404); } 
+    return res.json(200, productos);
   });
 };
+
+exports.getProductosBusquedaFiltros = function(req, res){ 
+  var filtro_id = req.body.busqueda.filtro_id;  
+  var tags_normalize = [];  
+  _.forEach(req.body.busqueda.palabras, function(tag){
+    console.dir(tag);
+    tags_normalize.push(tag);
+    tag = tag.toLowerCase();
+    tag = tag.replace(new RegExp(/a/g), '(a|á)');
+    tag = tag.replace(new RegExp(/e/g), '(e|é)');
+    tag = tag.replace(new RegExp(/i/g), '(i|í)');
+    tag = tag.replace(new RegExp(/o/g), '(o|ó)');
+    tag = tag.replace(new RegExp(/u/g), '(u|ú)');
+    tag = tag.replace(new RegExp(/á/g), '(a|á)');
+    tag = tag.replace(new RegExp(/é/g), '(e|é)');
+    tag = tag.replace(new RegExp(/í/g), '(i|í)');
+    tag = tag.replace(new RegExp(/ó/g), '(o|ó)');
+    tag = tag.replace(new RegExp(/ú/g), '(u|ú)');
+    //tag = tag.replace(new RegExp(/[ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñ]/g),'.');
+    console.dir(tag);
+    tags_normalize.push(tag);
+  });
+  console.dir(tags_normalize);  
+  var tags = tags_normalize.join('|');
+  var string_tags = '('+ tags + ')';
+  console.dir(string_tags);
+  if(filtro_id){
+    Producto.find({ $and : [
+                        { $or: 
+                          [
+                            {'tag': {$in: tags_normalize}},
+                            {'nombre':  new RegExp(string_tags, 'i')},
+                            {'descripcion':  new RegExp(string_tags, 'i')}   
+                          ]
+                        },
+                        {
+                          'filtros._id': filtro_id
+                        }
+                        ]
+                },
+    function(err, productos){
+      if (err) { return handleError(res, req); }
+      if(!productos) { return res.send(404); } 
+      return res.json(200, productos);
+    });
+  }
+  else{
+      Producto.find({ $or: 
+    [
+      {'tag': {$in: tags_normalize}},
+      {'nombre':  new RegExp(string_tags, 'i')},
+      {'descripcion':  new RegExp(string_tags, 'i')}   
+    ]},
+  function(err, productos){
+    if (err) { return handleError(res, req); }
+    if(!productos) { return res.send(404); } 
+    return res.json(200, productos);
+  });
+  }
+  
+};
+
 exports.getRangoPrecios = function(req, res){
   var precios = [];
   Producto.findOne().where({active:true}).sort('precio').exec(function(err,doc){

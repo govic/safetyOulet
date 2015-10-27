@@ -133,6 +133,17 @@ exports.getMarcas = function(req, res) {
   });
 };
 
+exports.getFiltrosPadres = function(req, res) {
+    Filtro.find({
+        es_menu_filtro: true,
+        tipo: 'NORMAL',
+        dependencias_filtro: null
+    }, function(err, filtros) {
+        if (err) return handleError(res, err);
+        return res.json(200, filtros);
+    });
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }

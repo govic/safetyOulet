@@ -1,7 +1,8 @@
 <div class="alert {{error ? 'alert-danger' : 'alert-success'}}  alerta" ng-show="show_message">
     <span>{{message}}</span>
 </div>
-<div class="container">
+<loading></loading>
+<div class="container top">
   <div class="row">
     <div class="col-md-12">
       <div class="row">        
@@ -137,7 +138,15 @@
           </div>
           <div class="col-md-8" ng-if="accion === 'comprar'">
            <input disabled  ng-model="total" class="form-control login-input">
-          </div>           
+          </div> 
+
+          <div ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Tienda'" class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <label style="float:none;">SU PEDIDO ESTARÁ DISPÓNIBLE MÍNIMO DENTRO DE 2 DÍAS HÁBILES</label>
+          </div>
+          <div ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'" class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <label style="float:none;">EL PLAZO DE ENTREGA ES ENTRE 5 Y 7 DÍAS HÁBILES</label>
+          </div> 
+
           <div class="col-md-6 col-md-offset-6">
             <input ng-show="!loading && accion === 'comprar'" type="submit" class="btn btn-default" value="CONFIRMAR COMPRA" ng-click="checkout()">
           </div> 
@@ -219,7 +228,15 @@
           </div>
           <div class="col-md-8" ng-if="accion === 'comprar'">
            <input disabled  ng-model="total" class="form-control login-input">
-          </div>          
+          </div>  
+
+          <div ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Tienda'" class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <label style="float:none;">SU PEDIDO ESTARÁ DISPÓNIBLE MÍNIMO DENTRO DE 2 DÍAS HÁBILES</label>
+          </div>
+          <div ng-if="accion === 'comprar' && usuario.tipo_entrega === 'Domicilio'" class="col-md-12 col-sm-12 col-xs-12 text-center">
+            <label style="float:none;">EL PLAZO DE ENTREGA ES ENTRE 5 Y 7 DÍAS HÁBILES</label>
+          </div> 
+
           <div class="col-md-6 col-md-offset-6">
             <input ng-show="!loading && accion === 'comprar'" type="submit" class="btn btn-default" value="CONFIRMAR COMPRA" ng-click="checkout()">
           </div> 

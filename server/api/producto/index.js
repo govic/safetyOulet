@@ -14,9 +14,9 @@ router.get('/:id/relacionados', controller.getProductosRelacionados);
 router.post('/query_seccion', controller.getProductosBySeccion);
 
 router.get('/:id/atributos', controller.getAtributosProducto);
-router.post('/busqueda/:tag', controller.getProductosBusqueda);
+router.post('/busqueda', controller.getProductosBusqueda);
 router.post('/getpreciosminmax', controller.getRangoPrecios);
-
+router.post('/busquedafiltros', controller.getProductosBusquedaFiltros);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.post('/', controller.create);

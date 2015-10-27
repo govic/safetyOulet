@@ -1,10 +1,71 @@
 <div class="alert {{error ? 'alert-danger' : 'alert-success'}} alerta" ng-if="error || exito"> 
     {{mensaje_newsletter}}
 </div>
-<div class="container home">
+<div id="buscador-flotante-id" style="display:none;" class="fondo-buscador">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-2 col-lg-offset-1 col-md-2 col-md-offset-1 col-sm-2 col-sm-offset-0 logo-buscador-margin-top hide-element-small">
+        <img src="assets/img/logo_buscador.png" class="img-responsive center-block">
+      </div>
+      <div  class="col-lg-8 col-md-8 col-sm-10 col-xs-12 id-buscador-filtros">
+        <div class="no-padding col-lg-5 col-md-4 col-sm-5 col-xs-12 buscador-fix">
+          <div class="buscador-select" ng-init="selectCollapse2 = true" ng-click="selectCollapse2 = !selectCollapse2">
+              {{categorias_texto | capitalize}}
+          </div>
+          <div collapse="selectCollapse2">
+            <div style="height:195px; overflow-y: scroll">
+              <div ng-repeat="filter in filtros_padre" class="buscador-select-option" ng-click="setFilter2(filter)" ng-class="$last ? 'no-border-bottom' : ''" title="{{filter.glosa_filtro | capitalize}}">
+                  {{filter.glosa_filtro | capitalize}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-padding col-lg-6 col-md-6 col-sm-6 col-xs-10">
+          <input class="buscador-input" ng-model="palabras_clave" placeholder="Escribe aquí"></input>
+        </div> 
+
+        <div class="no-padding col-lg-1 col-md-1 col-sm-1 col-xs-2">
+          <button class="buscador-button2" ng-click="busquedaFiltros()">
+            <span class="glyphicon glyphicon-search"> </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<loading></loading>
+<div class="container home top">
     <div class="row"> 
         <div class="col-md-12">            
-            <banner-principal-directive banners_principales="banners_principales"/>            
+            <banner-principal-directive banners_principales="banners_principales">
+            </banner-principal-directive>
+            <div id="buscador-id" class="absolute">
+                <div  class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-12 id-buscador-filtros">
+                  <div class="no-padding col-lg-5 col-md-4 col-sm-5 col-xs-12 buscador-fix">
+                    <div class="buscador-select" ng-init="selectCollapse = true" ng-click="selectCollapse = !selectCollapse">
+                        {{categorias_texto | capitalize}}
+                    </div>
+                    <div collapse="selectCollapse" id="buscador-colapse-id">
+                      <div style="height:195px; overflow-y: scroll">
+                        <div ng-repeat="filter in filtros_padre" class="buscador-select-option" ng-click="setFilter(filter)" ng-class="$last ? 'no-border-bottom' : ''" title="{{filter.glosa_filtro | capitalize}}">
+                            {{filter.glosa_filtro | capitalize}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="no-padding col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                    <input class="buscador-input" ng-model="palabras_clave" placeholder="Escribe aquí"></input>
+                  </div> 
+
+                  <div class="no-padding col-lg-1 col-md-1 col-sm-1 col-xs-2 text-center">
+                    <button class="buscador-button" ng-click="busquedaFiltros()">
+                      <span class="glyphicon glyphicon-search"> </span>
+                    </button>
+                  </div>
+                </div>
+            </div>             
         </div>
         <div class="col-md-9">
             <div class="row">

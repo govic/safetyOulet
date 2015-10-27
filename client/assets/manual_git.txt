@@ -1,0 +1,57 @@
+// ********************** //
+// configuración inicial
+// ********************** //
+
+cd <ruta de la carpeta del proyecto .. tiene que estar vacia>
+git init
+git clone https://github.com/govic/Ecommerce_govic.git
+cd Ecommerce_govic
+git config --global user.name <nombre alias>
+git config --global user.email <email>
+
+// ********************** //
+// editor de texto
+// ********************** //
+
+git config --global core.editor "c:\Program Files\Sublime Text 3\sublime_text.exe"
+
+// ********************** //
+// comparador de codigo .. modificar archivo c:\users\<usuario>\.gitconfig, agregar:
+// ********************** //
+
+[diff]
+	tool = winmerge
+[difftool "winmerge"]
+	cmd = "'C:/Program Files (x86)/WinMerge/WinMergeU.exe'" -e "$LOCAL" "$REMOTE"
+
+// **IMPORTANTE:** Utilizar las mismas tabulaciones del archivo original. La ruta de winmerge puede variar.
+
+// comparar archivos
+git difftool
+git difftool "client" --dir-diff
+
+// ********************** //
+// subir los cambios
+// ********************** //
+
+// subir a stage los cambios
+
+git add . 
+git add <file||folder>
+git status // para ver los archivos agregados
+
+// quitar archivos del stage
+
+git reset
+git reset <file||folder>
+git status // para ver los archivos quitados
+
+// subir los cambios al repositorio local
+
+git commit -m "Mensaje del commit .. ej: agrego modificaciones mantenedor productos.."
+git status // para ver que todas las modificaciones esten subidas
+
+// enviar los cambios al repositorio
+git push
+user: nicolas.gonzalez@govic.cl
+pass: 198798fig

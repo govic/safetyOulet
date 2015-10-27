@@ -1,5 +1,5 @@
 'use strict';
-angular.module('pruebaAngularApp').controller('MainCtrl', function($anchorScroll, $scope, $http, $timeout, formatCurrency) {
+angular.module('pruebaAngularApp').controller('MainCtrl', function ($state, $anchorScroll, $scope, $http, $timeout, formatCurrency) {
     console.log('Inicia .. MainCtrl');
     //indica las secciones que se mostraran en la pagina principal
     $anchorScroll('top');
@@ -12,6 +12,32 @@ angular.module('pruebaAngularApp').controller('MainCtrl', function($anchorScroll
     $scope.banners_secundarios = [];
     $scope.categorias_pag_principal = [];
     $scope.categorias = [];
+    $scope.categorias_texto = 'Categorías';
+     //variables para busqueda filtrada
+    $scope.filtros_padre = [];
+    $scope.filtro_escogido = {};
+    $scope.palabras_clave = '';
+
+    //para mover la busqueda
+    var buscador_flotante = angular.element(document.getElementById('buscador-flotante-id'));
+    var buscador = angular.element(document.getElementById('buscador-id'));
+    var buscador_colapse = angular.element(document.getElementById('buscador-colapse-id'));
+    var win = angular.element(window);
+
+    angular.element(window).scroll(function(){
+        //console.dir(win.scrollTop());
+        //console.dir(bbuscador.offset().top + buscador.outerHeight(true));
+
+        if(win.scrollTop() < buscador.offset().top + buscador.outerHeight(true)){ 
+            buscador_flotante.removeClass('show-buscador'); 
+            buscador_colapse.removeClass('hide');     
+        }
+        else{
+            buscador_flotante.addClass('show-buscador'); 
+            buscador_colapse.addClass('hide');
+        }
+        
+    });
     //obtiene secciones que se mostraran en pagina pincipal
     //IMPORTANTE: La carca de secciones y productos es asincrona .. el objeto se carga a la par con la vista
     console.log('MainCtrl .. $http.get(/api/seccion/secciones_principales)');
@@ -140,5 +166,34 @@ angular.module('pruebaAngularApp').controller('MainCtrl', function($anchorScroll
             $scope.loading = false;
         }
         $scope.correo_novedades = '';
+    };
+
+    $http.get('api/filtros/padres')
+    .success(function(filtros){
+        $scope.filtros_padre = filtros;
+        console.dir($scope.filtros_padre);
+    });
+
+    $scope.setFilter = function(filter){
+        $scope.selectCollapse = true;
+        $scope.categorias_texto = filter.glosa_filtro;
+        $scope.filtro_escogido = filter;
+        $scope.busquedaFiltros();
+    };
+
+    $scope.setFilter2 = function(filter){
+        $scope.selectCollapse2 = true;
+        $scope.categorias_texto = filter.glosa_filtro;
+        $scope.filtro_escogido = filter;
+        $scope.busquedaFiltros();
+    };
+
+    $scope.busquedaFiltros = function(){
+        var palabras = $scope.palabras_clave.split(' ');
+        var busqueda = {filtro_id: $scope.filtro_escogido._id, palabras: palabras};
+        console.dir(busqueda);
+        var busqueda_json = angular.toJson(busqueda);
+        var encodedData = window.btoa(busqueda_json);
+        $state.go('busqueda_filtros', {busqueda: encodedData});
     };
 });
