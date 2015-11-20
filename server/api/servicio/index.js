@@ -1,3 +1,10 @@
+/*
+
+20-11-2015 Hector Fuentes
+Agregar ruta sincronizacion costos de envio, copiado de tienda HW
+
+
+*/
 'use strict';
 
 var express = require('express');
@@ -38,5 +45,8 @@ router.post('/documentos/add', controller.addDocuments);
 
 //elimina documentos de producto
 router.post('/documentos/remove', controller.removeDocuments);
+
+//ruta para metodo que sincroniza tabla factores para calculo costo despacho
+router.post('/costo_despacho/sync', controller.updateCostosDespacho);
 
 module.exports = router;

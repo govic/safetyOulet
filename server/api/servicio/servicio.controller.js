@@ -1,3 +1,11 @@
+/*
+
+20-11-2015 Hector Fuentes
+Se agrega funcionalidad para sincronizacion de tabla costos despacho,
+copiadad desde tienda HW
+
+*/
+
 'use strict';
 
 var _ = require('lodash');
@@ -13,6 +21,7 @@ var Seccion = require('../seccion/seccion.model');
 var Variante = require('../variante/variante.model');
 var Tienda = require('../tienda/tienda.model');
 var Tracking = require('../tracking/tracking.model');
+var Despacho = require('../despacho/despacho.model');
 var constantes = require('../../constantes');
 var config = require('../../config/environment');
 
@@ -24,14 +33,20 @@ var CryptoJS = require('crypto-js');
 //https://code.google.com/p/crypto-js/
 //seccion: The Cipher Output
 var JsonFormatter = {
-  stringify: function (cipherParams) {
-    var jsonObj = { ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64) };// create json object with ciphertext
-    if (cipherParams.iv) { jsonObj.iv = cipherParams.iv.toString(); }// optionally add iv and salt
-    if (cipherParams.salt) { jsonObj.s = cipherParams.salt.toString(); }
-    return JSON.stringify(jsonObj);// stringify json object
+  stringify: function(cipherParams) {
+    var jsonObj = {
+      ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64)
+    }; // create json object with ciphertext
+    if (cipherParams.iv) {
+      jsonObj.iv = cipherParams.iv.toString();
+    } // optionally add iv and salt
+    if (cipherParams.salt) {
+      jsonObj.s = cipherParams.salt.toString();
+    }
+    return JSON.stringify(jsonObj); // stringify json object
   },
 
-  parse: function (jsonStr) {
+  parse: function(jsonStr) {
     // parse json string
     var jsonObj = JSON.parse(jsonStr);
 
@@ -51,15 +66,15 @@ var JsonFormatter = {
   }
 };
 
-var encriptar = function (texto) {
+var encriptar = function(texto) {
   var key = CryptoJS.enc.Utf8.parse(constantes.seguridad.enc_key);
   var iv = CryptoJS.enc.Utf8.parse(constantes.seguridad.enc_iv);
   var data = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(texto), key, {
-      keySize: 128 / 8,
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.ZeroPadding,
-      format: JsonFormatter  
+    keySize: 128 / 8,
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.ZeroPadding,
+    format: JsonFormatter
   });
   //obtiene solo el dato string encriptado
   return JSON.parse(data.toString()).ct;
@@ -68,52 +83,52 @@ var encriptar = function (texto) {
 exports.encriptar = encriptar;
 
 //metodo para desencriptar
-var desencriptar = function (texto_encriptado) {
+var desencriptar = function(texto_encriptado) {
   var key = CryptoJS.enc.Utf8.parse(constantes.seguridad.enc_key);
   var iv = CryptoJS.enc.Utf8.parse(constantes.seguridad.enc_iv);
   return CryptoJS.AES.decrypt(texto_encriptado, key, {
-      keySize: 128 / 8,
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.ZeroPadding
+    keySize: 128 / 8,
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.ZeroPadding
   }).toString(CryptoJS.enc.Utf8);
 };
 exports.desencriptar = desencriptar;
 
 //compara los tokens
-var verficaTokenTRX = function(token_api, req, res, callback){
-  if(!token_api) {
-    console.log('Token no encontrado.');
-    return handleError(res, "Acceso invalidado.");
+var verficaTokenTRX = function(token_api, req, res, callback) {
+    if (!token_api) {
+      console.log('Token no encontrado.');
+      return handleError(res, "Acceso invalidado.");
+    }
+    Parametros.findById(constantes.parametros.id_token_transacciones, function(err, token_local) {
+      if (err) {
+        console.log('Token no configurado.');
+        return handleError(res, err);
+      }
+      if (desencriptar(token_local.valor) === desencriptar(token_api)) {
+        callback(req, res);
+      } else {
+        console.log('Token no autorizado.');
+        return handleError(res, err);
+      }
+    });
   }
-  Parametros.findById(constantes.parametros.id_token_transacciones, function (err, token_local){
-    if(err) {
-      console.log('Token no configurado.');
-      return handleError(res, err);
-    }
-    if(desencriptar(token_local.valor) === desencriptar(token_api)){
-      callback(req, res);
-    } else {
-      console.log('Token no autorizado.');
-      return handleError(res, err);
-    }
-  });   
-}
-//Define o modifica token de transacciones
-//
-// OJO!
-// El token de transacciones es dinamico, el manager
-// decide si actualiza el token a una contruido de forma
-// aleatoria.
-//
-exports.tokenTienda = function(req, res){
-  
+  //Define o modifica token de transacciones
+  //
+  // OJO!
+  // El token de transacciones es dinamico, el manager
+  // decide si actualiza el token a una contruido de forma
+  // aleatoria.
+  //
+exports.tokenTienda = function(req, res) {
+
   //comprueba tokens
   console.log("Comprueba tokens");
-  if(!req.body.token_seguridad) {
+  if (!req.body.token_seguridad) {
     return handleError(res, "Acceso invalidado.");
   }
-  if(!req.body.token_transacciones) {
+  if (!req.body.token_transacciones) {
     return handleError(res, "Formato no es correcto.");
   }
 
@@ -124,14 +139,14 @@ exports.tokenTienda = function(req, res){
 
   //busca parametro token de seguridad
   console.log("Busca parametro " + constantes.parametros.id_token_seguridad);
-  Parametros.findById(constantes.parametros.id_token_seguridad, function(err, param){
+  Parametros.findById(constantes.parametros.id_token_seguridad, function(err, param) {
     console.dir(param);
-    
+
     //maneja error en busqueda
     if (err) return handleError(res, err);
 
     //si parametro token seguridad exite
-    if (param){
+    if (param) {
 
       console.log("Parametro " + constantes.parametros.id_token_seguridad + " existe : " + param.valor);
       //obtiene token desencriptado y compara
@@ -144,34 +159,34 @@ exports.tokenTienda = function(req, res){
         console.log("Error 1");
         return handleError(res, "Acceso invalidado.");
       }
-      
+
       console.log("Busca parametro " + constantes.parametros.id_token_transacciones);
       //actualiza token de transacciones
-      Parametros.findById(constantes.parametros.id_token_transacciones, function(err, param2){
+      Parametros.findById(constantes.parametros.id_token_transacciones, function(err, param2) {
         if (err) return handleError(res, err);
-        
-        if (param2){
-          
+
+        if (param2) {
+
           console.log("Paramtro " + constantes.parametros.id_token_transacciones + " existe : " + param2.valor);
           console.log("Actualiza parametro " + constantes.parametros.id_token_transacciones);
 
           param2.update({
             _id: constantes.parametros.id_token_transacciones,
             valor: req.body.token_transacciones
-          }, function(err){
+          }, function(err) {
             if (err) return handleError(res, err);
             //console.log("Operacion OK!");
             return res.send(200, constantes.parametros.respuesta_OK);
           });
         } else {
-          
+
           console.log("Paramtro " + constantes.parametros.id_token_transacciones + " NO existe");
           console.log("Crea paramtro " + constantes.parametros.id_token_transacciones);
 
           Parametros.create({
             _id: constantes.parametros.id_token_transacciones,
             valor: req.body.token_transacciones
-          }, function(err){
+          }, function(err) {
             if (err) return handleError(res, err);
             console.log("Operacion OK!");
             return res.send(200, constantes.parametros.respuesta_OK);
@@ -179,15 +194,15 @@ exports.tokenTienda = function(req, res){
         }
       });
 
-    //si parametro token seguridad NO exite
+      //si parametro token seguridad NO exite
     } else {
-      
+
       console.log("Crea parametro " + constantes.parametros.id_token_seguridad);
       //crea token seguridad con valores por defecto
       Parametros.create({
         _id: constantes.parametros.id_token_seguridad,
         valor: constantes.seguridad.token_seguridad
-      }, function(err, param3){
+      }, function(err, param3) {
 
         if (err) return handleError(res, err);
 
@@ -195,22 +210,22 @@ exports.tokenTienda = function(req, res){
         //verifica token seguridad
         var decryt_token_seguridad_tienda = desencriptar(param3.valor);
         if (decryt_token_seguridad_manager !== decryt_token_seguridad_tienda) return handleError(res, "Acceso invalidado.");
-        
+
         console.log("Busca parametro " + constantes.parametros.id_token_transacciones);
         //actualiza token de transacciones
-        Parametros.findById(constantes.parametros.id_token_transacciones, function(err, param3){
-          
+        Parametros.findById(constantes.parametros.id_token_transacciones, function(err, param3) {
+
           if (err) return handleError(res, err);
-          
-          if (param3){
+
+          if (param3) {
 
             console.log("Actualiza paramtro " + constantes.parametros.id_token_transacciones);
             param3.update({
               _id: constantes.parametros.id_token_transacciones,
               valor: req.body.token_transacciones
-            }, function(err){
+            }, function(err) {
               if (err) return handleError(res, err);
-              
+
               console.log("Operacion OK!");
               return res.send(200, constantes.parametros.respuesta_OK);
             });
@@ -221,9 +236,9 @@ exports.tokenTienda = function(req, res){
             Parametros.create({
               _id: constantes.parametros.id_token_transacciones,
               valor: req.body.token_transacciones
-            }, function(err){
+            }, function(err) {
               if (err) return handleError(res, err);
-              
+
               console.log("Operacion OK!");
               return res.send(200, constantes.parametros.respuesta_OK);
             });
@@ -235,54 +250,50 @@ exports.tokenTienda = function(req, res){
   });
 }
 
-exports.EncriptarCheckout = function(req, res){
-  var texto = JSON.stringify(req.body);
+exports.EncriptarCheckout = function(req, res) {
+    var texto = JSON.stringify(req.body);
 
-  var encriptado = encriptar(texto);
-  //console.dir(encriptado);
-  return res.json(200, encriptado);
-}
-//agrega documentos
-exports.addDocuments = function(req, res){
+    var encriptado = encriptar(texto);
+    //console.dir(encriptado);
+    return res.json(200, encriptado);
+  }
+  //agrega documentos
+exports.addDocuments = function(req, res) {
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
     var base = base64.fromByteArray(req.body.archivo);
 
-    var filename = path.join(__dirname, config.constantes.carpeta_publica+req.body.ruta+'/'+req.body.nombre);
+    var filename = path.join(__dirname, config.constantes.carpeta_publica + req.body.ruta + '/' + req.body.nombre);
     console.dir(filename);
 
-    fs.writeFile(filename, base, 'base64', function(err){    
-      if(err)
-      {
+    fs.writeFile(filename, base, 'base64', function(err) {
+      if (err) {
         console.dir(err);
 
         return handleError(res, err);
-      }
-      else{
+      } else {
         console.log('exito!');
         console.dir(req.body.nombre);
         return res.send(200, constantes.parametros.respuesta_OK);
       }
     });
-  });  
+  });
 };
 
 //elimina documentos
-exports.removeDocuments = function(req, res){
+exports.removeDocuments = function(req, res) {
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    var filename = path.join(__dirname, config.constantes.carpeta_publica+req.body.ruta+'/'+req.body.nombre);
+    var filename = path.join(__dirname, config.constantes.carpeta_publica + req.body.ruta + '/' + req.body.nombre);
     console.dir(filename);
 
-    fs.unlink(filename, function(err){    
-      if(err)
-      {
+    fs.unlink(filename, function(err) {
+      if (err) {
         return res.send(200, constantes.parametros.respuesta_OK);
       }
-      if(!filename) { 
+      if (!filename) {
         return res.send(200, constantes.parametros.respuesta_OK);
-      }
-      else{
+      } else {
         console.log('exito!');
         return res.send(200, constantes.parametros.respuesta_OK);
       }
@@ -291,7 +302,7 @@ exports.removeDocuments = function(req, res){
 };
 
 //agrega imágenes
-exports.addImagen = function(req, res){  
+exports.addImagen = function(req, res) {
 
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
     //console.dir(req.body.token);
@@ -302,17 +313,15 @@ exports.addImagen = function(req, res){
     var base = base64.fromByteArray(req.body.archivo);
 
     //guarda imagen original 
-    var filename = path.join(__dirname, config.constantes.carpeta_publica+req.body.ruta+'/'+req.body.nombre);
+    var filename = path.join(__dirname, config.constantes.carpeta_publica + req.body.ruta + '/' + req.body.nombre);
     //console.dir(filename);
 
-    fs.writeFile(filename, base, 'base64', function(err){    
-      if(err)
-      {
+    fs.writeFile(filename, base, 'base64', function(err) {
+      if (err) {
         console.dir(err);
 
         return handleError(res, err);
-      }
-      else{
+      } else {
         //console.log('exito!');
         //console.dir(req.body.nombre);
         return res.send(200, constantes.parametros.respuesta_OK);
@@ -323,22 +332,20 @@ exports.addImagen = function(req, res){
   });
 };
 
-exports.removeImagen = function(req, res){
+exports.removeImagen = function(req, res) {
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    var filename = path.join(__dirname, config.constantes.carpeta_publica+req.body.ruta+'/'+req.body.nombre);
+    var filename = path.join(__dirname, config.constantes.carpeta_publica + req.body.ruta + '/' + req.body.nombre);
     //console.dir(filename);
 
-    fs.unlink(filename, function(err){    
-      if(err)
-      {
+    fs.unlink(filename, function(err) {
+      if (err) {
         return res.send(200, constantes.parametros.respuesta_OK);
       }
-      if(!filename) { 
+      if (!filename) {
         return res.send(200, constantes.parametros.respuesta_OK);
-      }
-      else{
+      } else {
         //console.log('exito!');
         return res.send(200, constantes.parametros.respuesta_OK);
       }
@@ -347,59 +354,65 @@ exports.removeImagen = function(req, res){
 };
 
 //agrega uno o mas filtros a la base de datos
-exports.addFiltro = function(req, res){
+exports.addFiltro = function(req, res) {
 
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
     //busca filtro en la BD 
-    Filtro.findById(req.body._id, function (err, filtro){
-      if(err) { 
-        return handleError(res, err); 
+    Filtro.findById(req.body._id, function(err, filtro) {
+      if (err) {
+        return handleError(res, err);
       }
 
       //elimina tokens de filtros
       delete req.body.token;
       var padre = req.body.dependencias_filtro[0];
-      while(padre) {
+      while (padre) {
         delete padre.token;
         padre = padre.dependencias_filtro[0];
       }
 
       //si no existe lo crea
-      if(!filtro) { 
-        Filtro.create(req.body, function(err, filtro){    
-          if(err){ 
+      if (!filtro) {
+        Filtro.create(req.body, function(err, filtro) {
+          if (err) {
             return handleError(res, err);
           }
           return res.send(200, constantes.parametros.respuesta_OK);
-        });       
+        });
       }
       //si existe lo actualiza
-      else{
-        filtro.update(req.body, function (err) {
-          if (err) { 
-            return handleError(res, err); 
+      else {
+        filtro.update(req.body, function(err) {
+          if (err) {
+            return handleError(res, err);
           }
           return res.send(200, constantes.parametros.respuesta_OK);
         });
       }
     });
-  });  
+  });
 };
 
 //elimina un filtro de la base de datos segun id
-exports.removeFiltro = function(req, res){
+exports.removeFiltro = function(req, res) {
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    Filtro.findById(req.body._id, function (err, filtro) {
-      if(err) { return handleError(res, err);  }
+    Filtro.findById(req.body._id, function(err, filtro) {
+      if (err) {
+        return handleError(res, err);
+      }
 
-      if(!filtro) {  return res.send(500);  }
+      if (!filtro) {
+        return res.send(500);
+      }
 
       filtro.remove(function(err) {
-        if(err) { return handleError(res, err); }
+        if (err) {
+          return handleError(res, err);
+        }
         return res.send(200, constantes.parametros.respuesta_OK);
       });
     });
@@ -407,49 +420,49 @@ exports.removeFiltro = function(req, res){
 };
 
 //agrega uno o mas productos a la base de datos
-exports.addProducto = function(req, res){
+exports.addProducto = function(req, res) {
 
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
-    
-    Producto.findById(req.body._id, function (err, producto){
-      if(err) {
+
+    Producto.findById(req.body._id, function(err, producto) {
+      if (err) {
         console.log('prod no encontrado');
-        return handleError(res, err); 
+        return handleError(res, err);
       }
 
       //elimina tokens de filtros
-      _.each(req.body.filtros, function(item){
+      _.each(req.body.filtros, function(item) {
         delete item.token;
         var padre = item.dependencias_filtro[0];
-        while(padre) {
+        while (padre) {
           delete padre.token;
           padre = padre.dependencias_filtro[0];
         }
       });
       //elimina token de stock de productos
-      _.each(req.body.stock, function(stock){
+      _.each(req.body.stock, function(stock) {
         console.dir(stock);
         delete stock.token;
       });
 
       //si no existe lo crea
-      if(!producto) {
-        Producto.create(req.body, function(err, producto){    
-          if(err){ 
-            return handleError(res, err); 
+      if (!producto) {
+        Producto.create(req.body, function(err, producto) {
+          if (err) {
+            return handleError(res, err);
           }
           //console.dir(producto)
-          return res.send(200, constantes.parametros.respuesta_OK);    
-        });       
+          return res.send(200, constantes.parametros.respuesta_OK);
+        });
       }
       //si existe lo actualiza
-      else{
-        producto.update(req.body, function (err) {
-          if (err) { 
-            return handleError(res, err); 
+      else {
+        producto.update(req.body, function(err) {
+          if (err) {
+            return handleError(res, err);
           }
-          return res.send(200, constantes.parametros.respuesta_OK); 
+          return res.send(200, constantes.parametros.respuesta_OK);
         });
       }
     });
@@ -457,101 +470,109 @@ exports.addProducto = function(req, res){
 };
 
 //elimina un producto de la base de datos segun id
-exports.removeProducto = function(req, res){
-  
+exports.removeProducto = function(req, res) {
+
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    Producto.findById(req.body._id, function (err, producto) {
-      if(err) { 
-        return handleError(res, err); 
+    Producto.findById(req.body._id, function(err, producto) {
+      if (err) {
+        return handleError(res, err);
       }
-      if(!producto) { 
-        return res.send(500); 
+      if (!producto) {
+        return res.send(500);
       }
-      producto.remove(function(err) {        
-        if(err) {           
-          return handleError(res, err); 
+      producto.remove(function(err) {
+        if (err) {
+          return handleError(res, err);
         }
         return res.send(200, constantes.parametros.respuesta_OK);
-      });      
+      });
     });
   });
 };
 
-exports.UpdateStock = function(req, res){
+exports.UpdateStock = function(req, res) {
 
   var token = req.body[0].token;
 
   verficaTokenTRX(token, req, res, function(req, res) {
 
-    Producto.findById(req.body[0]._id_producto, function (err, producto) {
-      if(err) {         
-        return handleError(res, err); 
+    Producto.findById(req.body[0]._id_producto, function(err, producto) {
+      if (err) {
+        return handleError(res, err);
       }
-      if(!producto) {      
-        return res.send(500); 
+      if (!producto) {
+        return res.send(500);
       }
-      _.each(req.body, function(stock){
+      _.each(req.body, function(stock) {
         console.dir(stock);
         delete stock.token;
       });
-      producto.update({stock: req.body}, function (err) {
-          if (err) { 
-            return handleError(res, err); 
-          }
-          return res.send(200, constantes.parametros.respuesta_OK); 
-        });      
+      producto.update({
+        stock: req.body
+      }, function(err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.send(200, constantes.parametros.respuesta_OK);
+      });
     });
   });
 };
 
 //agrega uno o mas atributos a la base de datos
-exports.addBannerPrincipal = function(req, res){
-  
+exports.addBannerPrincipal = function(req, res) {
+
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
     //busca banner_principal en la BD
-    BannerPrincipal.findById(req.body._id, function (err, banner_principal){
-      if(err) { 
-        return handleError(res, err); 
+    BannerPrincipal.findById(req.body._id, function(err, banner_principal) {
+      if (err) {
+        return handleError(res, err);
       }
       //si no existe lo crea
-      if(!banner_principal) { 
-        BannerPrincipal.create(req.body, function(err, banner_principal){    
-          if(err){ 
-            return handleError(res, err); 
-          }
-          return res.send(200, constantes.parametros.respuesta_OK);
-        });       
-      }
-      //si existe lo actualiza
-      else{
-        banner_principal.update(req.body, function (err) {
-          if (err) { 
-            return handleError(res, err); 
+      if (!banner_principal) {
+        BannerPrincipal.create(req.body, function(err, banner_principal) {
+          if (err) {
+            return handleError(res, err);
           }
           return res.send(200, constantes.parametros.respuesta_OK);
         });
       }
-    });  
+      //si existe lo actualiza
+      else {
+        banner_principal.update(req.body, function(err) {
+          if (err) {
+            return handleError(res, err);
+          }
+          return res.send(200, constantes.parametros.respuesta_OK);
+        });
+      }
+    });
   });
 };
 
 //elimina un banner_principal de la base de datos segun id
-exports.removeBannerPrincipal = function(req, res){
-  
+exports.removeBannerPrincipal = function(req, res) {
+
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    BannerPrincipal.findById(req.body._id, function (err, banner_principal) {
-      if(err) { return handleError(res, err); }
+    BannerPrincipal.findById(req.body._id, function(err, banner_principal) {
+      if (err) {
+        return handleError(res, err);
+      }
 
-      if(!banner_principal) { res.send(200, constantes.parametros.respuesta_OK); }
+      if (!banner_principal) {
+        res.send(200, constantes.parametros.respuesta_OK);
+      }
 
       banner_principal.remove(function(err) {
-        if(err) { return handleError(res, err); }
+        if (err) {
+          return handleError(res, err);
+        }
         return res.send(200, constantes.parametros.respuesta_OK);
       });
     });
@@ -560,26 +581,32 @@ exports.removeBannerPrincipal = function(req, res){
 
 
 //agrega uno o mas atributos a la base de datos
-exports.addSeccion = function(req, res){
-  
+exports.addSeccion = function(req, res) {
+
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    Seccion.findById(req.body._id, function (err, seccion){
-      
-      if(err) { return handleError(res, err); }
-      
+    Seccion.findById(req.body._id, function(err, seccion) {
+
+      if (err) {
+        return handleError(res, err);
+      }
+
       //si no existe lo crea
-      if(!seccion) { 
-        Seccion.create(req.body, function(err, seccion){    
-          if(err){ return handleError(res, err); }
+      if (!seccion) {
+        Seccion.create(req.body, function(err, seccion) {
+          if (err) {
+            return handleError(res, err);
+          }
           return res.send(200, constantes.parametros.respuesta_OK);
-        });       
+        });
       }
       //si existe lo actualiza
-      else{
-        seccion.update(req.body, function (err) {
-          if (err) { return handleError(res, err); }
+      else {
+        seccion.update(req.body, function(err) {
+          if (err) {
+            return handleError(res, err);
+          }
           return res.send(200, constantes.parametros.respuesta_OK);
         });
       }
@@ -588,18 +615,24 @@ exports.addSeccion = function(req, res){
 };
 
 //elimina un seccion de la base de datos segun id
-exports.removeSeccion = function(req, res){
-  
+exports.removeSeccion = function(req, res) {
+
   //compara tokens de transacciones
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
 
-    Seccion.findById(req.body._id, function (err, seccion) {
-      if(err) { return handleError(res, err); }
+    Seccion.findById(req.body._id, function(err, seccion) {
+      if (err) {
+        return handleError(res, err);
+      }
 
-      if(!seccion) { return res.send(500); }
+      if (!seccion) {
+        return res.send(500);
+      }
 
       seccion.remove(function(err) {
-        if(err) { return handleError(res, err); }
+        if (err) {
+          return handleError(res, err);
+        }
         return res.send(200, constantes.parametros.respuesta_OK);
       });
     });
@@ -607,26 +640,18 @@ exports.removeSeccion = function(req, res){
 };
 
 //agrega una tienda a la base de datos
-exports.addTienda = function(req, res){
-  
+exports.addTienda = function(req, res) {
   //compara tokens de transacciones
-  console.log("addTienda ..");
-  console.dir(req.body);
-  console.log("addTienda ..");
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
-
-    Tienda.findById(req.body._id, function (err, tienda){
-
-      if(err) return handleError(res, err);
-
-      if(!tienda) { 
-        Tienda.create(req.body, function(err, tienda){    
-          if(err) return handleError(res, err);        
+    Tienda.findById(req.body._id, function(err, tienda) {
+      if (err) return handleError(res, err);
+      if (!tienda) {
+        Tienda.create(req.body, function(err, tienda) {
+          if (err) return handleError(res, err);
           return res.send(200, constantes.parametros.respuesta_OK);
         });
-      }
-      else {
-        tienda.update(req.body, function (err) {
+      } else {
+        tienda.update(req.body, function(err) {
           if (err) return handleError(res, err);
           console.log(constantes.parametros.respuesta_OK);
           return res.send(200, constantes.parametros.respuesta_OK);
@@ -637,14 +662,14 @@ exports.addTienda = function(req, res){
 };
 
 //obtiene y envia datos de tracking acumulados
-exports.SolicitarTracking = function (req, res){
+exports.SolicitarTracking = function(req, res) {
   //console.log('entro a solicitar tracking');
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
-    
-    Tracking.find(function (err, trackings) {
+
+    Tracking.find(function(err, trackings) {
       //console.dir(trackings);
-      if(err) { 
-        return handleError(res, err); 
+      if (err) {
+        return handleError(res, err);
       }
       return res.json(200, trackings);
     });
@@ -652,14 +677,39 @@ exports.SolicitarTracking = function (req, res){
 };
 
 //elimina datos de tracking acumulados
-exports.EliminarTracking = function(req, res){
+exports.EliminarTracking = function(req, res) {
   verficaTokenTRX(req.body.token, req, res, function(req, res) {
     Tracking.remove({}, function(err) {
-      if(err){ 
-        return handleError(res, err); 
+      if (err) {
+        return handleError(res, err);
       }
       return res.send(200, constantes.parametros.respuesta_OK);
     });
+  });
+};
+
+//actualizar los costos de despacho segun region
+exports.updateCostosDespacho = function(req, res) {
+  //verifica token
+  verficaTokenTRX(req.body.token, req, res, function(req, res) {
+    //verifica listas de costos de envio
+    if (req.body.costos && req.body.costos.length > 0) {
+      //elimina todos los doc de la coll despacho
+      Despacho.remove({}, function(err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        //agrega array de docs con datos costo despacho a coll despacho
+        Despacho.create(req.body.costos, function(err) {
+          if (err) {
+            return handleError(res, err);
+          }
+          return res.send(200, constantes.parametros.respuesta_OK);
+        });
+      });
+    } else {
+      return handleError(res, 'Lista de costos de envío no puede estar vacia.');
+    }
   });
 };
 

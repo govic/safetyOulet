@@ -50,7 +50,13 @@ angular.module('pruebaAngularApp')
       logout: function() {
         $cookieStore.remove('token');
         currentUser = {};        
-        $localStorage.$reset();        
+        $localStorage.$default({
+            carrito_productos: [], //json con productos
+            carrito_cantidad: 0, // cantidad de productos .. cuenta todos los productos
+            carrito_total: 0, //total precios .. todos los productos
+            cotizacion_producto: [],
+            cotizacion_cantidad: 0
+        });        
       },
 
       /**

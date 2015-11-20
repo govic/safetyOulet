@@ -131,13 +131,13 @@ exports.getProductosRelacionados = function(req, res){
         '_id': { 
           $in: producto.productos_rel //busca para todos los id de filtro
         }
-      }, function(err, data){
-        
+      }, function(err, data){        
         if(err) { return handleError(res, err); }
         //retorna lista de objetos filtro
         return res.json(data);
       });      
     }
+    return res.json({});
   });
 };
 
