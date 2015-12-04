@@ -1,0 +1,305 @@
+<!--mensajes-->
+<div class="alert alert-{{usuario.mensaje.tipo}} alerta alerta-small" ng-show="usuario.mensaje.mostrar">
+	<span>{{usuario.mensaje.texto}}</span>
+</div>
+<!--llamada a directiva loading-->
+<loading></loading>
+<!--contenedor principal-->
+<div class="container">
+	<div class="row margen-top-finalizar">
+		<div class="col-md-6">
+			<!--inicia formulario login-->
+			<div class="caja-finalizar">
+				<h3><i class="glyphicon glyphicon-user"></i>&nbsp;DATOS DE USUARIO</h3>
+				<div>
+					<!--mensajes-->
+					<!--formulario login-->
+					<form ng-if="!usuario.login.estaLogueado" name="loginForm" novalidate ng-submit="!loginForm.$invalid && login(loginForm)">
+						<!--mensaje inicial-->
+						<div class="row">
+							<div class="col-md-12">
+								<p>Bienvenido, por favor ingrese su e-mail y clave para continuar con su compra.</p>
+								<p>Si no recuerda su clave, <a href="/recuperar_contrasena">Haga click aquí.</a></p>
+								<br>
+							</div>
+						</div>
+						<!--correo-->
+						<div class="row">
+							<div class="col-md-4 col-sm-5 col-xs-12">
+								<label>*EMAIL</label>
+							</div>
+							<div class="col-md-8 col-sm-7 col-xs-12">
+								<input class="form-control login-input" required name="correo" type="email" ng-class="((loginForm.$submitted) && (loginForm.correo.$error.required || loginForm.correo.$error.email)) ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.login.correo" />
+							</div>
+						</div>
+						<!--password-->
+						<div class="row">
+							<div class="col-md-4 col-sm-5 col-xs-12">
+								<label>*CONTRASEÑA</label>
+							</div>
+							<div class="col-md-8 col-sm-7 col-xs-12">
+								<input class="form-control login-input" required name="password" type="password" ng-class="((loginForm.$submitted) && (loginForm.password.$error.required)) ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.login.password" />
+							</div>
+						</div>
+						<!--submit-->
+						<div class="row">
+							<div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 col-xs-12">
+								<input type="submit" class="btn btn-default" value="INGRESAR">
+							</div>
+						</div>
+						<!--ir a registro-->
+						<div class="row">
+							<div class="col-md-12">
+								<p>Si no se encuentra registrado puede hacerlo <a href="/login/finalizar">aquí.</a></p>
+							</div>
+						</div>
+					</form>
+					<!--ir a registro-->
+					<div ng-if="usuario.login.estaLogueado" class="row row-fix">
+						<div class="col-md-12">
+							<p>Bienvenido {{usuario.datos.nombre}},</p>
+							<p>Si desea efectuar una compra anónimamente haga click <a href="" ng-click="logout()">aquí</a> para cerrar sesión.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--fin formulario login-->
+			<!--inicia formulario datos usuario-->
+			<div class="caja-finalizar">
+				<h3><i class="glyphicon glyphicon-list"></i>&nbsp;{{usuario.login.estaLogueado ? ('DATOS DE ' + (usuario.dato.esPersona ? 'USUARIO' : 'EMPRESA')) : 'COMPRAR SIN REGISTRARSE'}}</h3>
+				<!--seleccionar tipo de usuario-->
+				<div ng-if="!usuario.login.estaLogueado" class="row radio-finalizar">
+					<div class="col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-12">
+						<input type="radio" ng-value="true" name="datos_tipo_usuario" ng-model="usuario.datos.esPersona">
+						<label class="form-label form-label-small">Persona</label>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-12">
+						<input type="radio" ng-value="false" name="datos_tipo_usuario" ng-model="usuario.datos.esPersona">
+						<label class="form-label form-label-small">Empresa</label>
+					</div>
+				</div>
+				<!--form datos usuario-->
+				<!--direccion despacho-->
+				<div class="row row-fix" ng-show="usuario.datos.esDespacho()">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*DIRECCIÓN DESPACHO</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.direccion_despacho ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.direccion_despacho" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!--region despacho-->
+				<div class="row row-fix" ng-show="usuario.datos.esDespacho()">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*REGIÓN DESPACHO</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<select class="form-control" ng-class="usuario.errores.region_despacho ? 'usuario-input-wrong' : 'usuario-input'" ng-options="item.region for item in regiones track by item.region" ng-model="regionSeleccionada" ng-change="usuario.datos.region_despacho = regionSeleccionada.region;comunaSeleccionada = regionSeleccionada.comunas[0];usuario.datos.comuna_despacho = comunaSeleccionada.comuna" ng-blur="usuario.datos.validar()"></select>
+					</div>
+				</div>
+				<!--comuna despacho-->
+				<div class="row row-fix finalizar-datos-fix-last" ng-show="usuario.datos.esDespacho()">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*COMUNA DESPACHO</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<select class="form-control" ng-class="usuario.errores.comuna_despacho ? 'usuario-input-wrong' : 'usuario-input'" ng-options="item.comuna for item in regionSeleccionada.comunas track by item.comuna" ng-model="comunaSeleccionada" ng-change="usuario.datos.comuna_despacho = comunaSeleccionada.comuna; usuario.carro.calcula_costo_envio()" ng-blur="usuario.datos.validar()"></select>
+					</div>
+				</div>
+				<!--rut-->
+				<div class="row row-fix">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<!--se elimina condicion run - rut-->
+						<label class="form-label form-label-small">{{usuario.datos.esPersona ? '*R.U.T.' : '*R.U.T.'}}</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.rut ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.rut" placeholder="Ej: 12345678-9" ng-blur="formatoValidaRut()" maxlength="10" />
+					</div>
+				</div>
+				<!--nombre-->
+				<div class="row row-fix">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">{{usuario.datos.esPersona ? '*NOMBRE' : '*RAZÓN'}}</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.nombre ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.nombre" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!--giro-->
+				<div class="row row-fix" ng-if="!usuario.datos.esPersona">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*GIRO</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.giro ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.giro" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!--correo-->
+				<div class="row row-fix">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*E-MAIL</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.correo ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.correo" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!--telefono-->
+				<div class="row row-fix" ng-class="usuario.datos.esPersona ? 'finalizar-datos-fix-last' : ''">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*TELEFONO</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.telefono ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.telefono" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!--direccion-->
+				<div class="row row-fix" ng-show="!usuario.datos.esPersona">
+					<div class="col-md-4 col-sm-5 col-xs-12 margen-abajo-10">
+						<label class="form-label form-label-small">*DIRECCIÓN FACTURACIÓN</label>
+					</div>
+					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
+						<input class="form-control" required type="text" ng-class="usuario.errores.direccion ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.direccion" ng-blur="usuario.datos.validar()" />
+					</div>
+				</div>
+				<!-- agregar esta clase al div row final: finalizar-datos-fix-last -->
+			</div>
+			<!--fin formulario datos usuario-->
+		</div>
+		<div class="col-md-6">
+			<!--vista carro de compras-->
+			<div class="caja-finalizar">
+				<h3><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;CARRO DE COMPRAS</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="text-center">PRODUCTO</th>
+							<th class="text-center">DESCRIPCIÓN</th>
+							<th title="Precio Unitario / Cantidad / Subtotal" class="text-center">PRECIO</th>
+							<!--<th>CANTIDAD</th>
+						<th>SUBTOTAL</th>-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="producto in usuario.carro.items">
+							<td>
+								<img class="img-responsive" src="{{producto.url_imagen}}">
+							</td>
+							<td>
+								<span>{{producto.nombre}}</span>
+								<br>
+								<span ng-repeat="variante in producto.variante">
+									<strong>{{variante.nombre}}: {{variante.opcion}}</strong>
+								</span>
+								<br>
+								<span class="disponible-finalizar">(Disponible)</span>
+							</td>
+							<td class="text-center">
+								<span>
+								<span class="nowrap">${{producto.precio_unitario_formato}} X {{producto.cantidad}}</span>
+								<br> ${{producto.precio_total_formato}}
+								</span>
+							</td>
+							<!--<td>
+							<span>{{producto.cantidad}}</span>
+						</td>
+						<td>
+							<span>${{producto.precio_total_formato}}</span>
+						</td>-->
+						</tr>
+					</tbody>
+				</table>
+				<!--muestra costo envio-->
+				<div class="row footer-tabla-finalizar text-center">
+					<div class="col-md-4 col-md-offset-6 col-sm-6 col-xs-6">
+						<strong>+ Costo de Envío</strong>
+					</div>
+					<div class="col-md-2 col-sm-6 col-xs-6 text-center">
+						<span>{{usuario.carro.costo_envio_total_formato()}}</span>
+					</div>
+				</div>
+				<!--muestra total calculado-->
+				<div class="row footer-tabla-finalizar text-center">
+					<div class="col-md-4 col-md-offset-6 col-sm-6 col-xs-6 label-total-carro-finalizar">
+						TOTAL
+					</div>
+					<div class="col-md-2 col-sm-6 col-xs-6 text-center precio-total-carro-finalizar">
+						{{usuario.carro.precio_total_formato()}}
+					</div>
+				</div>
+			</div>
+			<!--fin vista carro de compras-->
+			<!--opciones de envio-->
+			<div class="caja-finalizar">
+				<h3><i class="glyphicon glyphicon-send"></i>&nbsp;OPCIONES DE ENVÍO</h3>
+				<div class="row opciones-envio-finalizar">
+					<!--retiro en tienda-->
+					<div class="col-md-6">
+						<div class="text-center">
+							<label class="radio-inline">
+								<input checked="checked" type="radio" name="tipo-medio-envio" value="retiro_tienda" ng-model="usuario.datos.tipo_envio" ng-change="usuario.carro.calcula_costo_envio()">
+								<img src="/assets/img/icono_tienda.png">
+							</label>
+							<br>
+							<strong class="opciones-envio-finalizar-t1">Retiro en Tienda: $0</strong>
+							<p class="opciones-envio-finalizar-t2">(1-2 días hábiles)</p>
+						</div>
+						<div ng-show="!usuario.datos.esDespacho()">
+							<br>
+							<label class="radio-inline">
+								<input checked="checked" type="radio" name="tienda-retiro" value="tienda_1" ng-model="usuario.datos.tienda_retiro">
+								<strong class="opciones-envio-finalizar-s1">Tienda 1</strong>
+							</label>
+							<br>
+							<p class="opciones-envio-finalizar-s1">Camino Pedro Jorquera #151 (Local 4), Centrol Comercial Puerto Madero, Pudahuel.</p>
+							<label class="radio-inline">
+								<input type="radio" name="tienda-retiro" value="tienda_2" ng-model="usuario.datos.tienda_retiro">
+								<strong class="opciones-envio-finalizar-s1">Tienda 2</strong>
+							</label>
+							<p class="opciones-envio-finalizar-s1">Presidente Eduardo Frei Montalva #5151, Conchalí.</p>
+						</div>
+					</div>
+					<!--despacho via correo-->
+					<div class="col-md-6">
+						<div class="text-center">
+							<label class="radio-inline">
+								<input type="radio" name="tipo-medio-envio" value="despacho_domicilio" ng-model="usuario.datos.tipo_envio" ng-change="usuario.carro.calcula_costo_envio()">
+								<img src="/assets/img/icono_camion.png">
+							</label>
+							<br>
+							<strong class="opciones-envio-finalizar-t1">Despacho Vía Correos de Chile: {{usuario.carro.costo_envio_total_formato()}}</strong>
+							<p class="opciones-envio-finalizar-t2">(3-5 días hábiles)</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--fin opciones de envio-->
+			<!--seleccionar medio de pago-->
+			<div class="caja-finalizar">
+				<h3><i class="glyphicon glyphicon-credit-card"></i>&nbsp;SISTEMA DE PAGO</h3>
+				<div class="row medio-pago-finalizar">
+					<div class="col-md-12">
+						<label class="radio-inline" ng-if="usuario.config.permite_webpay">
+							<input checked="checked" type="radio" name="medio-pago" value="webpay" ng-model="usuario.datos.medio_pago">
+							<img src="/assets/img/icono_webpay.png" class="img-responsive" title="Webpay Plus - ¡Tus compras en Internet!" alt="Webpay Plus - ¡Tus compras en Internet!">
+						</label>
+						<label class="radio-inline" ng-if="usuario.config.permite_khipu">
+							<input type="radio" name="medio-pago" value="khipu" ng-model="usuario.datos.medio_pago">
+							<img src="/assets/img/icono-khipu.png" title="Khipu - Paga con tu banco" alt="Khipu - Paga con tu banco">
+						</label>
+						<label class="radio-inline" ng-if="usuario.config.permite_transferencia">
+							<input type="radio" name="medio-pago" value="transferencia" ng-model="usuario.datos.medio_pago">
+							<img src="/assets/img/icono-transferencia.png" title="Transferencia Manual" alt="Transferencia Manual">
+						</label>
+					</div>
+				</div>
+			</div>
+			<!--fin seleccionar medio de pago-->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-9 col-sm-12 col-xs-12 div-finalizar-compra">
+			<button ng-click="finalizarCompra()">PAGAR</button>
+		</div>
+	</div>
+</div>
+</div>

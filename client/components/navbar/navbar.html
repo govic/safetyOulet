@@ -27,10 +27,13 @@
             <div>
             </div>
             <li class="dropdown">
-              <a class="dropdown-toggle" ng-click="ordenar()">PRODUCTOS
-              </a>
+              <a class="dropdown-toggle" ng-click="ordenar()">PRODUCTOS</a>
               <ul class="dropdown-menu">
-                <div class="container drop-menu">              
+                <li class="hide show-element-small" ng-repeat="categoria in categorias">
+                  <a href="catalogo/{{categoria.item._id}}">{{categoria.item.glosa_filtro}}
+                  </a>
+                </li>
+                <div class="container drop-menu hide-element-small">              
                   <div class="row" masonry="{ transitionDuration: '0.5s' }">
                     <div class="col-md-2 masonry-brick" ng-repeat="categoria in categorias">
                       <ul>
@@ -38,14 +41,14 @@
                           <a href="catalogo/{{categoria.item._id}}">{{categoria.item.glosa_filtro}}
                           </a>
                         </li>
-                        <li ng-repeat="cat in categoria.childs">
+                        <li class="hide-element-medium" ng-repeat="cat in categoria.childs">
                           <a href="catalogo/{{cat.item._id}}">{{cat.item.glosa_filtro}}
                           </a>
                         </li>                        
                       </ul>
                     </div>         
                   </div>
-                  <div class="row">
+                  <div class="row hide-element-medium">
                     <div class="col-md-12 marcas-titulos">
                       <div>ACTIVIDADES</div>
                     </div>

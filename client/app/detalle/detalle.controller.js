@@ -10,10 +10,9 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
         $http.get('/api/users/me').success(function(user) {
             var path = $location.path();
             var tipo_usuario = '';
-            if(user.role === 'enterprise'){
+            if (user.role === 'enterprise') {
                 tipo_usuario = 'empresa';
-            }
-            else{
+            } else {
                 tipo_usuario = 'persona';
             }
             //console.dir(usuario);
@@ -49,7 +48,7 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
     $scope.small = '';
     $scope.large = '';
     $scope.precio_formato = '';
-    $scope.precios = [];   
+    $scope.precios = [];
     $scope.stocks_informar = [];
     var marca = {};
     var id_usuario = '';
@@ -140,26 +139,30 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
     $scope.addCarro = function(producto, cantidad) {
         console.dir(producto);
         console.dir(cantidad);
-        if (cantidad.length !== 0) {           
+        if (cantidad.length !== 0) {
             $scope.precios = [];
             $scope.elegidos = [];
             $scope.variantes = [];
-            _.each(producto.stock, function(stock){
-                var opcion = _.find(producto.variantes[0].valores, function(opcion){
+            _.each(producto.stock, function(stock) {
+                var opcion = _.find(producto.variantes[0].valores, function(opcion) {
                     return opcion._id === stock.combinacion[0]._id_opcion;
                 });
                 $scope.variantes.push(opcion);
                 var precio_recalculado = $scope.recalcularPrecio(producto, opcion);
                 $scope.precios.push(precio_recalculado);
-                $scope.elegidos.push({codigo_sku: stock.codigo, stock: stock.stock});                               
+                $scope.elegidos.push({
+                    codigo_sku: stock.codigo,
+                    stock: stock.stock,
+                    peso: stock.peso
+                });
             });
             console.dir(producto);
             console.dir(cantidad);
             console.dir($scope.variantes);
             console.dir($scope.precios);
             console.dir($scope.elegidos);
-            for (var i = 0; i < cantidad.length; i++) {               
-                carroService.add(producto, cantidad[i], [$scope.variantes[i]], $scope.precios[i], $scope.elegidos[i]);                
+            for (var i = 0; i < cantidad.length; i++) {
+                carroService.add(producto, cantidad[i], [$scope.variantes[i]], $scope.precios[i], $scope.elegidos[i]);
             }
             $scope.exito = true;
             $timeout(function() {
@@ -169,10 +172,10 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
         }
     };
 
-    $scope.recalcularPrecio = function(producto, opcion_variante){
+    $scope.recalcularPrecio = function(producto, opcion_variante) {
         //console.dir(opcion_variante);
         var precio_aux = _.clone(producto.precio);
-        if(opcion_variante && producto){            
+        if (opcion_variante && producto) {
             if (opcion_variante.tipo_operacion === 'Descuento') {
                 if (opcion_variante.operacion === 'Porcentaje') {
                     precio_aux = precio_aux - precio_aux * (parseInt(opcion_variante.costo) / 100);
@@ -191,23 +194,27 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
         }
     };
     $scope.cotizarEmpresa = function(producto, cantidad) {
-        console.dir(cantidad);
+        //console.dir(cantidad);
         if (cantidad.length !== 0) {
             $scope.elegidos = [];
             $scope.variantes = [];
-            _.each(producto.stock, function(stock){
-                var opcion = _.find(producto.variantes[0].valores, function(opcion){
+            _.each(producto.stock, function(stock) {
+                var opcion = _.find(producto.variantes[0].valores, function(opcion) {
                     return opcion._id === stock.combinacion[0]._id_opcion;
                 });
                 $scope.variantes.push(opcion);
-                $scope.elegidos.push({codigo_sku: stock.codigo, stock: stock.stock});                               
+                $scope.elegidos.push({
+                    codigo_sku: stock.codigo,
+                    stock: stock.stock,
+                    peso: stock.peso
+                });
             });
             console.dir(producto);
             console.dir(cantidad);
             console.dir($scope.variantes);
             console.dir($scope.elegidos);
-            for (var i = 0; i < cantidad.length; i++) {               
-                carroService.cotizar(producto, cantidad[i], [$scope.variantes[i]], $scope.elegidos[i]);                
+            for (var i = 0; i < cantidad.length; i++) {
+                carroService.cotizar(producto, cantidad[i], [$scope.variantes[i]], $scope.elegidos[i]);
             }
             $scope.exito5 = true;
             $timeout(function() {
@@ -326,7 +333,7 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
     }).error(function() {
         //error get secciones
     });
-    $http.get('/api/banner_principal/secundarios').success(function(data_banners){
+    $http.get('/api/banner_principal/secundarios').success(function(data_banners) {
         $scope.banners_secundarios = data_banners;
         console.dir($scope.banners_secundarios);
     });
