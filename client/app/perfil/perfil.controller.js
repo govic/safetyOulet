@@ -1,6 +1,8 @@
 'use strict';
-angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScroll, $state, validarRut, $cookieStore, $http, $scope, $stateParams) {
+angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScroll, $state, validarRut, $cookieStore, $http, $scope, $stateParams, CONSTANTES) {
     $anchorScroll('top');
+    $scope.EMAIL_REGEXP = CONSTANTES.EMAIL_REGEXP;
+    $scope.TEL_REGEXP = CONSTANTES.TEL_REGEXP;
     $scope.mostrar_detalle = false;
     $scope.mostrar_detalle_c = false;
     $scope.editar_perfil = false;
@@ -10,40 +12,35 @@ angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScro
 
     $scope._id = $stateParams.user_id;
     console.dir($scope._id);
-    var decodedData = window.atob($stateParams.user_id);   
+    var decodedData = window.atob($stateParams.user_id);
     var user_id = angular.fromJson(decodedData);
-    console.dir(user_id);    
+    console.dir(user_id);
 
     if ($cookieStore.get('token')) {
-        $http.get('/api/users/me')
-        .success(function(user) {
-            if(user_id === user._id){
+        $http.get('/api/users/me').success(function(user) {
+            if (user_id === user._id) {
                 $scope.usuario = user;
-                console.dir($scope.usuario);
+                $scope.correo_original = user.email;
                 $http.post('api/compras/findcompras', {
                     id_usuario: user_id
-                })
-                .success(function(compras) {
-                    $scope.compras = compras;        
+                }).success(function(compras) {
+                    $scope.compras = compras;
                     console.dir($scope.compras);
                 });
 
                 $http.post('api/cotizacion/findcotizacion', {
                     id_usuario: user_id
-                })
-                .success(function(cotizacion) {
-                    $scope.cotizaciones = cotizacion;        
+                }).success(function(cotizacion) {
+                    $scope.cotizaciones = cotizacion;
                     console.dir($scope.cotizaciones);
                 });
-            }
-            else{
+            } else {
                 $state.go('main');
-            }            
+            }
         });
-    }
-    else{
+    } else {
         $state.go('main');
-    }  
+    }
 
     $scope.editProfile = function() {
         $scope.editar_perfil = true;
@@ -67,10 +64,18 @@ angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScro
                 };
                 $http.post('api/users/edituser', usuario).success(function() {
                     $scope.editar_perfil = false;
+                }).error(function(err) {
+                    console.error('error al modifica datos perfil');
+                    console.error(err);
+                    if (err && err.error_correo_ocupado) {
+                        $scope.usuario.email = $scope.correo_original;
+                        window.alert('El correo ingresado ya esta en uso, por favor ingrese otro correo.');
+                    } else {
+                        window.alert('En estos momentos no podemos atender a su solicitud, por favor inténtelo más tarde.');
+                    }
                 });
             }
-        }
-        if ($scope.usuario.role === 'enterprise') {
+        } else if ($scope.usuario.role === 'enterprise') {
             $scope.mensajes_error2 = [];
             if (validarRut.validar($scope.usuario.rut) === false) {
                 $scope.mensajes_error2.push(false);
@@ -87,6 +92,15 @@ angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScro
                 };
                 $http.post('api/users/edituser', usuario).success(function() {
                     $scope.editar_perfil = false;
+                }).error(function(err) {
+                    console.error('error al modifica datos perfil');
+                    console.error(err);
+                    if (err && err.error_correo_ocupado) {
+                        $scope.usuario.email = $scope.correo_original;
+                        window.alert('El correo ingresado ya esta en uso, por favor ingrese otro correo.');
+                    } else {
+                        window.alert('En estos momentos no podemos atender a su solicitud, por favor inténtelo más tarde.');
+                    }
                 });
             }
         }

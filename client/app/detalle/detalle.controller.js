@@ -1,43 +1,9 @@
 'use strict';
-angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScroll, $state, $scope, $http, $stateParams, carroService, $cookieStore, $location, $timeout, formatCurrency) {
-    console.log('Inicia .. DetalleCtrl');
-    //solo pruebas ..
+angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScroll, $state, $scope, $http, $stateParams, carroService, $cookieStore, $location, $timeout, formatCurrency, CONSTANTES) {
     $anchorScroll('top');
+    $scope.EMAIL_REGEXP = CONSTANTES.EMAIL_REGEXP;
     $scope.exito = false;
     $scope.exito5 = false;
-    //$log.debug('Inicia .. CatalogoCtrl');
-    if ($cookieStore.get('token')) {
-        $http.get('/api/users/me').success(function(user) {
-            var path = $location.path();
-            var tipo_usuario = '';
-            if (user.role === 'enterprise') {
-                tipo_usuario = 'empresa';
-            } else {
-                tipo_usuario = 'persona';
-            }
-            //console.dir(usuario);
-            //console.dir(path);  
-            var contenido = path.split('/');
-            var elemento = contenido[2];
-            //console.dir(tipo);
-            //console.dir(elemento);                
-            $http.get('/api/producto/' + elemento).success(function(data) {
-                var id = data._id;
-                var producto = data.nombre;
-                //console.dir(producto);
-                $http.post('api/trackings', {
-                    usuario_id: user._id,
-                    usuario_nombre: user.name || user.razon,
-                    usuario_correo: user.email,
-                    usuario_tipo: tipo_usuario,
-                    tipo_elemento: 'producto',
-                    id_elemento: parseInt(id),
-                    elemento: producto,
-                    fecha: new Date()
-                });
-            });
-        });
-    }
     $scope.detalle = [];
     $scope.cantidad = [];
     $scope.ruta = [];
@@ -53,12 +19,7 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
     var marca = {};
     var id_usuario = '';
     $scope.correo = '';
-    if ($cookieStore.get('token')) {
-        $http.get('/api/users/me').success(function(user) {
-            $scope.correo = user.email;
-            id_usuario = user._id;
-        });
-    }
+
     $scope.correo_stock_loading = false;
     $scope.tellMeWhen = function(stocks_informar) {
         $scope.correo_stock_loading = true;
@@ -226,77 +187,107 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
     $scope.goToCart = function() {
         $state.go('carro');
     };
-    $http.get('/api/producto/' + $stateParams.id_producto + '/relacionados').success(function(data) {
-        $scope.productos_relacionados = data;
-        //console.dir(data);
-    });
+
     //obtiene detalles del producto
-    $http.get('api/producto/' + $stateParams.id_producto).
-    success(function(detalle_producto) {
+    $http.get('api/producto/' + $stateParams.id_producto).success(function(detalle_producto) {
+
         $scope.detalle = detalle_producto;
+
+        //tracking si usuario esta logueado
+        //el metodo fue movido desde la parte inicial del controlador hasta aqui para no hacer dos veces la consulta del producto
+        if ($cookieStore.get('token')) {
+            $http.get('/api/users/me').success(function(user) {
+                //las siguientes dos variables estaban en una consulta user/me aparte, fueron movidas aqui adentro para no hacer dos veces la consulta de datos usuario
+                $scope.correo = user.email;
+                id_usuario = user._id;
+                $http.post('api/trackings', {
+                    usuario_id: user._id,
+                    usuario_nombre: user.role === 'enterprise' ? user.razon : user.name,
+                    usuario_correo: user.email,
+                    usuario_tipo: user.role === 'enterprise' ? 'empresa' : 'persona',
+                    tipo_elemento: 'producto',
+                    id_elemento: parseInt(detalle_producto._id),
+                    elemento: detalle_producto.nombre,
+                    fecha: new Date()
+                });
+            });
+        }
+
+
         //guarda un copia de los filtros del producto           
         var filtros = _.clone($scope.detalle.filtros);
-        console.dir(filtros);
+
         //capturar marca
         marca = _.find(filtros, function(filtro) {
             return filtro.tipo === 'MARCA';
         });
-        console.dir(marca);
         $scope.precio = _.clone($scope.detalle.precio);
+
         //formatea el precio con punto separador de miles
         $scope.precio_formato = _.clone($scope.precio);
         $scope.precio_formato = formatCurrency.format($scope.precio_formato);
         $scope.foto_principal = $scope.detalle.images[0];
         angular.element(document.getElementById('desc_larga')).append($scope.detalle.descripcion_larga);
-        $http.get('/api/filtros').success(function(filtros2) {
-            $scope.marca = _.find(filtros2, function(filtro) {
-                return filtro._id === marca._id;
+
+        //obtiene todas los filtros para obtener detalle filtro MARCA
+        //este metodo podria ser reemplazado por un get/show by id filtro
+        if (marca) {
+            $http.get('/api/filtros').success(function(filtros2) {
+                $scope.marca = _.find(filtros2, function(filtro) {
+                    return filtro._id === marca._id;
+                });
             });
-            console.dir($scope.marca);
-        });
+        }
+
         //deja solo lso filtro categoría y subcategoria
         for (var i = 0; i <= filtros.length - 1; i++) {
             if (filtros[i].es_menu_filtro === false && filtros[i].es_activo_filtro === false) {
-                //console.dir(filtros[i].es_menu_filtro);
                 filtros.splice(i, 1);
             }
         }
+
         //quita los filtros categoria root
         for (var j = 0; j <= filtros.length - 1; j++) {
             if (filtros[j].dependencias_filtro[0] === null) {
-                //console.dir(filtros[i].dependencias_filtro[0]);
                 filtros.splice(j, 1);
             }
         }
-        //console.dir(filtros);
-        $http.get('api/filtros/' + $scope.detalle.filtros[0]._id).success(function(data) {
-            var parte_ruta = data;
-            var ultimo = data;
-            //console.dir(parte_ruta.dependencias_filtro[0]);
-            if (parte_ruta.dependencias_filtro[0] !== null) {
-                while (parte_ruta.dependencias_filtro[0] !== null) {
-                    $scope.ruta.push(parte_ruta.dependencias_filtro[0]);
-                    //console.dir($scope.ruta);
-                    parte_ruta = parte_ruta.dependencias_filtro[0];
-                    //console.dir(parte_ruta);
+
+        //obtiene detalle del primer filtro asociado al producto
+        if ($scope.detalle.filtros && $scope.detalle.filtros.length > 0) {
+            $http.get('api/filtros/' + $scope.detalle.filtros[0]._id).success(function(data) {
+                var parte_ruta = data;
+                var ultimo = data;
+                if (parte_ruta.dependencias_filtro[0] !== null) {
+                    while (parte_ruta.dependencias_filtro[0] !== null) {
+                        $scope.ruta.push(parte_ruta.dependencias_filtro[0]);
+                        parte_ruta = parte_ruta.dependencias_filtro[0];
+                    }
                 }
-            }
-            $scope.ruta.push(ultimo);
-            $scope.ultimo = ultimo;
-        });
+                $scope.ruta.push(ultimo);
+                $scope.ultimo = ultimo;
+            });
+        }
     });
+
+    //obtiene producto relacionados
+    $http.get('/api/producto/' + $stateParams.id_producto + '/relacionados').success(function(data) {
+        $scope.productos_relacionados = data;
+    });
+
+    //metodo para cambiar entre fotos del producto
     $scope.changePicture = function(item) {
         $scope.foto_principal = item;
         $scope.small = 'assets/producto/medium_' + $scope.foto_principal.toString();
-        console.dir($scope.small);
         $scope.large = 'assets/producto/' + $scope.foto_principal.toString();
-        console.dir($scope.large);
         $scope.data = {
             small_image: $scope.small,
             large_image: $scope.large
         };
         $scope.exito = false;
     };
+
+    //obtiene secciones principales
     $http.get('/api/seccion/secciones_principales').success(function(secciones) {
         if (secciones && secciones.length !== 0) {
             //agrega secciones a scope
@@ -314,27 +305,26 @@ angular.module('pruebaAngularApp').controller('DetalleCtrl', function($anchorScr
                             //console.dir(precio_format);
                             prod.precio_format = precio_format;
                         });
-                    } else {
-                        //la seccion no tiene productos para mostrar
                     }
-                }).error(function() {
-                    //error get productos
+                }).error(function(err) {
+                    console.error('error al obtener producto dentro de seccion');
+                    console.error(err);
                 });
             });
             $scope.primera_seccion = _.first(secciones);
-            console.dir($scope.primera_seccion);
             $scope.segunda_seccion = _.first(_.without(secciones, $scope.primera_seccion));
-            console.dir($scope.segunda_seccion);
             $scope.tercera_seccion = _.first(_.without(secciones, $scope.segunda_seccion, $scope.primera_seccion));
+            console.dir($scope.primera_seccion);
+            console.dir($scope.segunda_seccion);
             console.dir($scope.tercera_seccion);
-        } else {
-            //no existen secciones para mostrar
         }
-    }).error(function() {
-        //error get secciones
+    }).error(function(err) {
+        console.error('error al obtener secciones principales');
+        console.error(err);
     });
+
+    //obtiene banners secciones secundarias //no existen secciones terciarias
     $http.get('/api/banner_principal/secundarios').success(function(data_banners) {
         $scope.banners_secundarios = data_banners;
-        console.dir($scope.banners_secundarios);
     });
 });

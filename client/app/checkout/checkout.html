@@ -29,7 +29,7 @@
               <label>*EMAIL</label>
             </div>
             <div class="col-md-7">
-              <input type="email" required name="lemail" ng-model="user.email" ng-class="((loginForm.$submitted) && (loginForm.lemail.$error.required || loginForm.lemail.$error.email)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
+              <input type="email" required name="lemail" ng-model="user.email" ng-class="((loginForm.$submitted) && (loginForm.lemail.$error.required || loginForm.lemail.$error.email || loginForm.lemail.$error.pattern)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'" ng-pattern="EMAIL_REGEXP">
             </div>
 
             <div class="col-md-3 col-md-offset-1">
@@ -67,7 +67,7 @@
                   <label>*Email</label>
                 </div>
                 <div class="col-md-8">
-                  <input type="email" ng-class="((registerForm.$submitted) && (registerForm.remail.$error.required || registerForm.remail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="remail" ng-model="user_r.email_r">
+                  <input type="email" ng-class="((registerForm.$submitted) && (registerForm.remail.$error.required || registerForm.remail.$error.email || registerForm.remail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="remail" ng-model="user_r.email_r" ng-pattern="EMAIL_REGEXP">
                 </div>
                 <div class="col-md-4">
                   <label>*Contraseña</label>
@@ -109,7 +109,7 @@
                   <label>*Email</label>
                 </div>
                 <div class="col-md-8">
-                  <input type="email" ng-class="((registerEForm.$submitted) && (registerEForm.reemail.$error.required || registerEForm.reemail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="reemail" ng-model="user_re.email_re">
+                  <input type="email" ng-class="((registerEForm.$submitted) && (registerEForm.reemail.$error.required || registerEForm.reemail.$error.email || registerEForm.reemail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="reemail" ng-model="user_re.email_re" ng-pattern="EMAIL_REGEXP">
                 </div>
                 <div class="col-md-4">
                   <label>*Contraseña</label>
@@ -173,13 +173,13 @@
                     <label>*E-mail</label>
                   </div>
                   <div class="col-md-8">
-                    <input type="email" required ng-model="usuario.email" name="unrEmail" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrEmail.$error.required || usuarioNoRegistradoForm.unrEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                    <input type="email" required ng-model="usuario.email" name="unrEmail" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrEmail.$error.required || usuarioNoRegistradoForm.unrEmail.$error.email || usuarioNoRegistradoForm.unrEmail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
                   </div>
                   <div class="col-md-4">
                     <label>*Teléfono</label>
                   </div>
                   <div class="col-md-8">
-                    <input type="text" required ng-model="usuario.telefono" name="unrTelefono" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                    <input type="text" required ng-model="usuario.telefono" name="unrTelefono" ng-class="((usuarioNoRegistradoForm.$submitted) && (usuarioNoRegistradoForm.unrTelefono.$error.required || usuarioNoRegistradoForm.unrTelefono.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
                   </div>
                   <div class="col-md-4">
                     <label>*Dirección</label>
@@ -247,13 +247,13 @@
                     <label>*E-mail</label>
                   </div>
                   <div class="col-md-8">
-                    <input type="email" required ng-model="usuario.email" name="enrEmail" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrEmail.$error.required || empresaNoRegistradaForm.enrEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                    <input type="email" required ng-model="usuario.email" name="enrEmail" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrEmail.$error.required || empresaNoRegistradaForm.enrEmail.$error.email || empresaNoRegistradaForm.enrEmail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
                   </div>
                   <div class="col-md-4">
                     <label>*Teléfono</label>
                   </div>
                   <div class="col-md-8">
-                    <input type="text" required ng-model="usuario.telefono" name="enrTelefono" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+                    <input type="text" required ng-model="usuario.telefono" name="enrTelefono" ng-class="((empresaNoRegistradaForm.$submitted) && (empresaNoRegistradaForm.enrTelefono.$error.required || empresaNoRegistradaForm.enrTelefono.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
                   </div>
                   <div class="col-md-4">
                     <label>*Dirección</label>
@@ -340,13 +340,13 @@
             <label>*E-mail</label>
           </div>
           <div class="col-md-8">
-            <input type="email" required ng-model="usuario.email" name="urEmail" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urEmail.$error.required || usuarioRegistradoForm.urEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+            <input type="email" required ng-model="usuario.email" name="urEmail" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urEmail.$error.required || usuarioRegistradoForm.urEmail.$error.email || usuarioRegistradoForm.urEmail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
           </div>
           <div class="col-md-4">
             <label>*Teléfono</label>
           </div>
           <div class="col-md-8">
-            <input type="text" required ng-model="usuario.telefono" name="urTelefono" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+            <input type="text" required ng-model="usuario.telefono" name="urTelefono" ng-class="((usuarioRegistradoForm.$submitted) && (usuarioRegistradoForm.urTelefono.$error.required || usuarioRegistradoForm.urTelefono.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
           </div>
           <div class="col-md-4">
             <label>*Dirección</label>
@@ -417,13 +417,13 @@
             <label>*E-mail</label>
           </div>
           <div class="col-md-8">
-            <input type="email" required ng-model="usuario.email" name="erEmail" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erEmail.$error.required || empresaRegistradForm.erEmail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+            <input type="email" required ng-model="usuario.email" name="erEmail" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erEmail.$error.required || empresaRegistradForm.erEmail.$error.email || empresaRegistradForm.erEmail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
           </div>
           <div class="col-md-4">
             <label>*Teléfono</label>
           </div>
           <div class="col-md-8">
-            <input type="text" required ng-model="usuario.telefono" name="erTelefono" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erTelefono.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'">
+            <input type="text" required ng-model="usuario.telefono" name="erTelefono" ng-class="((empresaRegistradForm.$submitted) && (empresaRegistradForm.erTelefono.$error.required || empresaRegistradForm.erTelefono.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
           </div>
           <div class="col-md-4">
             <label>*Dirección</label>

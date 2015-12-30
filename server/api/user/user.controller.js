@@ -183,23 +183,28 @@ exports.changePassword = function(req, res, next) {
     });
 };
 exports.editUser = function(req, res, err) {
-    console.dir(req.body);
     User.findById(req.body._id, function(err, user) {
         if (err) return validationError(res, err);
-        if (!user) {
-            return res.send(404);
-        }
-        user.update(req.body, function(err) {
-            if (err) {
-                return res.send(500, err);
+        if (!user) return res.send(404);
+        //valida email no repetido
+        User.findOne({
+            email: req.body.email
+        }, function(err, vUser) {
+            if (err) return validationError(res, err);
+            if (vUser && (vUser._id.equals(user._id))) {
+                user.update(req.body, function(err) {
+                    if (err) return validationError(res, err);
+                    return res.json(200, user);
+                });
+            } else {
+                return validationError(res, {
+                    error_correo_ocupado: 'Email ya esta ocupado por otro usuario'
+                });
             }
-            return res.json(200, user);
         });
     });
 };
 exports.addCarro = function(req, res, err) {
-    //console.dir(req.body.user);
-    //console.dir(req.body.carrito);
     var userId = req.body.user._id;
     User.findById(userId, function(err, user) {
         user.carrito = {};

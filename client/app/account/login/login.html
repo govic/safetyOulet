@@ -1,139 +1,140 @@
 <div class="alert alert-danger alerta" ng-show="errors">
-    <span>{{mensaje_error}}</span>
+  <span>{{mensaje_error}}</span>
 </div>
 <div class="alert alert-success alerta" ng-show="success">
-    <span>{{mensaje_exito}}</span>
+  <span>{{mensaje_exito}}</span>
 </div>
 <loading></loading>
 <div class="container home top">
-    <div class="row">      
-      <div class="col-md-12"> 
-        <div class="row"> 
-        <div class="col-md-4"><hr></hr>
-          </div>  
-          <div class="col-md-4" style="text-align: center;"><h3>DATOS DE USUARIO</h3>
-          </div>
-          <div class="col-md-4"><hr></hr>
-          </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-4">
+          <hr></hr>
+        </div>
+        <div class="col-md-4" style="text-align: center;">
+          <h3>DATOS DE USUARIO</h3>
+        </div>
+        <div class="col-md-4">
+          <hr></hr>
         </div>
       </div>
-      <div class="col-md-6 col-md-offset-3 usuario">
-        <div class="row">
-          <div class="col-md-12">
-            <p>Bienvenido, por favor ingrese su e-mail y clave para continuar con su compra.</p>
-            <p>Si no recuerda su clave, <a href="/recuperar_contrasena">haga click aquí.</a></p>
-          </div>            
-          <form class="col-md-12" style="margin-top: 10px;"  name="loginForm" novalidate ng-submit="!loginForm.$invalid && login(loginForm)">
-            <div class="col-md-3 col-md-offset-1">
-              <label>*EMAIL</label>
-            </div>
-            <div class="col-md-7">
-              <input type="email" required name="lemail" ng-model="user.email" ng-class="((loginForm.$submitted) && (loginForm.lemail.$error.required || loginForm.lemail.$error.email)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
-            </div>
-
-            <div class="col-md-3 col-md-offset-1">
-              <label>*CONTRASEÑA</label>
-            </div>
-            <div class="col-md-7">
-              <input type="password" required name="lpassword" ng-model="user.password" ng-class="((loginForm.$submitted) && (loginForm.lpassword.$error.required)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
-            </div>
-            <div ng-show="!loading_login" class="col-md-4 col-md-offset-8">
-              <input type="submit" class="btn btn-default" value="INGRESAR">
-            </div>
-            <div ng-show="loading_login" class="col-md-1 col-md-offset-9" style="text-align:center;" >
-              <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+    </div>
+    <div class="col-md-6 col-md-offset-3 usuario">
+      <div class="row">
+        <div class="col-md-12">
+          <p>Bienvenido, por favor ingrese su e-mail y clave para continuar con su compra.</p>
+          <p>Si no recuerda su clave, <a href="/recuperar_contrasena">haga click aquí.</a></p>
+        </div>
+        <form class="col-md-12" style="margin-top: 10px;" name="loginForm" novalidate ng-submit="!loginForm.$invalid && login(loginForm)">
+          <div class="col-md-3 col-md-offset-1">
+            <label>*EMAIL</label>
+          </div>
+          <div class="col-md-7">
+            <input type="email" required name="lemail" ng-model="user.email" ng-class="((loginForm.$submitted) && (loginForm.lemail.$error.required || loginForm.lemail.$error.email || loginForm.lemail.$error.pattern)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'" ng-pattern="EMAIL_REGEXP">
+          </div>
+          <div class="col-md-3 col-md-offset-1">
+            <label>*CONTRASEÑA</label>
+          </div>
+          <div class="col-md-7">
+            <input type="password" required name="lpassword" ng-model="user.password" ng-class="((loginForm.$submitted) && (loginForm.lpassword.$error.required)) ? 'form-control usuario-input-wrong' : 'form-control usuario-input'">
+          </div>
+          <div ng-show="!loading_login" class="col-md-4 col-md-offset-8">
+            <input type="submit" class="btn btn-default" value="INGRESAR">
+          </div>
+          <div ng-show="loading_login" class="col-md-1 col-md-offset-9" style="text-align:center;">
+            <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-6 col-md-offset-3 txt">
+      <p>Sino se encuentra registrado, por favor complete los siguientes datos.</p>
+    </div>
+    <div class="col-md-6 col-md-offset-3 no-side-padding">
+      <div class="row informacion">
+        <h3>Registro Personas</h3>
+        <div class="col-md-12">
+          <form name="registerForm" novalidate ng-submit="!registerForm.$invalid && register(registerForm)">
+            <div class="row">
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-4">
+                <label>*Nombre Completo</label>
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-class="((registerForm.$submitted) && (registerForm.rname.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rname" ng-model="user_r.name_r">
+              </div>
+              <div class="col-md-4">
+                <label>*Email</label>
+              </div>
+              <div class="col-md-8">
+                <input type="email" ng-class="((registerForm.$submitted) && (registerForm.remail.$error.required || registerForm.remail.$error.email || registerForm.remail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="remail" ng-model="user_r.email_r" ng-pattern="EMAIL_REGEXP">
+              </div>
+              <div class="col-md-4">
+                <label>*Contraseña</label>
+              </div>
+              <div class="col-md-8">
+                <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword" ng-model="user_r.password_r" ng-minlength="3">
+              </div>
+              <div class="col-md-4">
+                <label>*Repetir contraseña</label>
+              </div>
+              <div class="col-md-8">
+                <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword2" ng-model="user_r.password_r2" ng-minlength="3">
+              </div>
+              <div ng-show="!loading_register" class="col-md-6 col-md-offset-6">
+                <input type="submit" class="btn btn-default" value="Registrarse">
+              </div>
+              <div ng-show="loading_register" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;">
+                <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+              </div>
             </div>
           </form>
         </div>
       </div>
-      <div class="col-md-6 col-md-offset-3 txt">
-        <p>Sino se encuentra registrado, por favor complete los siguientes datos.</p>
-      </div>
-      <div class="col-md-6 col-md-offset-3 no-side-padding">
-        <div class="row informacion">
-          <h3>Registro Personas</h3>
-          <div class="col-md-12">
-            <form name="registerForm" novalidate ng-submit="!registerForm.$invalid && register(registerForm)">
-              <div class="row">
-                <div class="col-md-12">&nbsp;</div>
-                <div class="col-md-4">
-                  <label>*Nombre Completo</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="text" ng-class="((registerForm.$submitted) && (registerForm.rname.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rname" ng-model="user_r.name_r">
-                </div>
-
-                <div class="col-md-4">
-                  <label>*Email</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="email" ng-class="((registerForm.$submitted) && (registerForm.remail.$error.required || registerForm.remail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="remail" ng-model="user_r.email_r">
-                </div>
-                <div class="col-md-4">
-                  <label>*Contraseña</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword" ng-model="user_r.password_r" ng-minlength="3">
-                </div>
-                <div class="col-md-4">
-                  <label>*Repetir contraseña</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="password" ng-class="((registerForm.$submitted) && (registerForm.rpassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rpassword2" ng-model="user_r.password_r2" ng-minlength="3">
-                </div>
-                <div ng-show="!loading_register" class="col-md-6 col-md-offset-6">
-                  <input type="submit" class="btn btn-default" value="Registrarse">
-                </div>
-                <div ng-show="loading_register" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;" >
-                  <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
-                </div>
+    </div>
+    <div class="col-md-6 col-md-offset-3 no-side-padding">
+      <div class="row informacion">
+        <h3>Registro Empresas</h3>
+        <div class="col-md-12">
+          <form name="registerEForm" novalidate ng-submit="!registerEForm.$invalid && register_e(registerEForm)">
+            <div class="row">
+              <div class="col-md-12">&nbsp;</div>
+              <div class="col-md-4">
+                <label>*Razón social</label>
               </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-md-offset-3 no-side-padding">
-        <div class="row informacion">
-          <h3>Registro Empresas</h3>
-          <div class="col-md-12">
-             <form name="registerEForm" novalidate ng-submit="!registerEForm.$invalid && register_e(registerEForm)">
-              <div class="row">
-                <div class="col-md-12">&nbsp;</div>
-                <div class="col-md-4">
-                  <label>*Razón social</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="text" ng-class="((registerEForm.$submitted) && (registerEForm.rename.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rename" ng-model="user_re.name_re">
-                </div>
-                <div class="col-md-4">
-                  <label>*Email</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="email" ng-class="((registerEForm.$submitted) && (registerEForm.reemail.$error.required || registerEForm.reemail.$error.email)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="reemail" ng-model="user_re.email_re">
-                </div>
-                <div class="col-md-4">
-                  <label>*Contraseña</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword" ng-model="user_re.password_re" ng-minlength="3">
-                </div>
-                <div class="col-md-4">
-                  <label>*Repetir contraseña</label>
-                </div>
-                <div class="col-md-8">
-                  <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword2" ng-model="user_re.password_re2" ng-minlength="3">
-                </div>
-                <div ng-show="!loading_register_e" class="col-md-6 col-md-offset-6">
-                  <input type="submit" class="btn btn-default" value="Registrarse">
-                </div>
-                <div ng-show="loading_register_e" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;">
-                  <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
-                </div>
+              <div class="col-md-8">
+                <input type="text" ng-class="((registerEForm.$submitted) && (registerEForm.rename.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="rename" ng-model="user_re.name_re">
               </div>
-            </form>
-          </div>
+              <div class="col-md-4">
+                <label>*Email</label>
+              </div>
+              <div class="col-md-8">
+                <input type="email" ng-class="((registerEForm.$submitted) && (registerEForm.reemail.$error.required || registerEForm.reemail.$error.email || registerEForm.reemail.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="reemail" ng-model="user_re.email_re" ng-pattern="EMAIL_REGEXP">
+              </div>
+              <div class="col-md-4">
+                <label>*Contraseña</label>
+              </div>
+              <div class="col-md-8">
+                <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword" ng-model="user_re.password_re" ng-minlength="3">
+              </div>
+              <div class="col-md-4">
+                <label>*Repetir contraseña</label>
+              </div>
+              <div class="col-md-8">
+                <input type="password" ng-class="((registerEForm.$submitted) && (registerEForm.repassword2.$error.required)) ? 'form-control login-input-wrong' : 'form-control login-input'" required name="repassword2" ng-model="user_re.password_re2" ng-minlength="3">
+              </div>
+              <div ng-show="!loading_register_e" class="col-md-6 col-md-offset-6">
+                <input type="submit" class="btn btn-default" value="Registrarse">
+              </div>
+              <div ng-show="loading_register_e" class="col-md-1 col-md-offset-10" style="margin-bottom: 13px; margin-top: 10px;">
+                <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </div>  <!-- end container home -->
-
+  </div>
+</div>
+<!-- end container home -->

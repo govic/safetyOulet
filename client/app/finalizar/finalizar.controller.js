@@ -7,7 +7,10 @@ copia codigo desde HW para funcionalidad proceso compra recortado
 
 'use strict';
 
-angular.module('pruebaAngularApp').controller('FinalizarCtrl', function($scope, $cookieStore, $http, validarRut, $localStorage, $state, formatCurrency, constantes, $window, carroService, Auth, $timeout) {
+angular.module('pruebaAngularApp').controller('FinalizarCtrl', function($scope, $cookieStore, $http, validarRut, $localStorage, $state, formatCurrency, $window, carroService, Auth, $timeout, CONSTANTES) {
+	
+	$scope.EMAIL_REGEXP = CONSTANTES.EMAIL_REGEXP;
+
 	//validacion carro de compras
 	if (!carroService.validaCarroCompra()) {
 		console.log('error al validar carro de compras en localstorage');
@@ -92,9 +95,9 @@ angular.module('pruebaAngularApp').controller('FinalizarCtrl', function($scope, 
 				//valida giro
 				$scope.usuario.errores.giro = $scope.usuario.datos.esPersona ? false : ($scope.usuario.datos.giro ? false : true);
 				//valida correo
-				$scope.usuario.errores.correo = $scope.usuario.datos.correo ? false : true;
+				$scope.usuario.errores.correo = $scope.usuario.datos.correo && CONSTANTES.EMAIL_REGEXP.test($scope.usuario.datos.correo) ? false : true;
 				//valida telefono
-				$scope.usuario.errores.telefono = $scope.usuario.datos.telefono ? false : true;
+				$scope.usuario.errores.telefono = $scope.usuario.datos.telefono && CONSTANTES.TEL_REGEXP.test($scope.usuario.datos.telefono) ? false : true;
 				//valida direccion
 				$scope.usuario.errores.direccion = $scope.usuario.datos.direccion ? false : ($scope.usuario.datos.esPersona ? false : true);
 				//caso tipo envio despacho

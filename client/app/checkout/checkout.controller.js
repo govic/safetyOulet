@@ -1,6 +1,8 @@
 'use strict';
-angular.module('pruebaAngularApp').controller('CheckoutCtrl', function($anchorScroll, $timeout, $stateParams, validarRut, formatCurrency, $state, $scope, Auth, $localStorage, $location, $window, $cookieStore, $http) {
+angular.module('pruebaAngularApp').controller('CheckoutCtrl', function($anchorScroll, $timeout, $stateParams, validarRut, formatCurrency, $state, $scope, Auth, $localStorage, $location, $window, $cookieStore, $http, CONSTANTES) {
     $anchorScroll('top');
+    $scope.EMAIL_REGEXP = CONSTANTES.EMAIL_REGEXP;
+    $scope.TEL_REGEXP = CONSTANTES.TEL_REGEXP;
     $scope.isAdmin = Auth.isAdmin;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.usr = {};

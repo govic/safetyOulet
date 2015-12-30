@@ -12,31 +12,31 @@
         <div class="row informacion">
           <div class="col-md-12">&nbsp;</div>
           <div class="col-md-4">
-            <label>*R.U.N.</label>
+            <label>R.U.N.</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.run" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Nombre Completo</label>
+            <label>Nombre Completo</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.name" class="form-control login-input">
           </div>                    
           <div class="col-md-4">
-            <label>*E-mail</label>
+            <label>E-mail</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.email" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Teléfono</label>
+            <label>Teléfono</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.telefono" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Dirección</label>
+            <label>Dirección</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.direccion" class="form-control login-input">
@@ -63,10 +63,10 @@
           <form name="usuarioForm" novalidate ng-submit="!usuarioForm.$invalid && saveProfile()">
             <div class="col-md-12">&nbsp;</div>
             <div class="col-md-8 col-md-offset-4">
-              <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
+              <span style="font-size:75%;opacity:0.8;">Ej: 12345678-9 (sin puntos y con guión)</span>
             </div>
             <div class="col-md-4">
-              <label title="{{usuarioForm.run}}">*R.U.N.</label>
+              <label title="{{usuarioForm.run}}">R.U.N.</label>
             </div>
             <div class="col-md-8">
               <input rut type="text" ng-model="usuario.run" name="run" ng-class="(usuarioForm.$submitted && usuarioForm.run.$error.rut) ? 'form-control login-input-wrong' : 'form-control login-input'">
@@ -75,22 +75,22 @@
               <label>*Nombre Completo</label>
             </div>
             <div class="col-md-8">
-              <input type="text" ng-model="usuario.name" name="nombre" class="form-control login-input">
+              <input type="text" ng-model="usuario.name" name="nombre" required ng-class="usuarioForm.$submitted && usuarioForm.nombre.$error.required ? 'form-control login-input-wrong' : 'form-control login-input'">
             </div>                    
             <div class="col-md-4">
               <label>*E-mail</label>
             </div>
             <div class="col-md-8">
-              <input type="email" name="email" ng-model="usuario.email" ng-class="(usuarioForm.$submitted && usuarioForm.email.$error.email) ? 'form-control login-input-wrong' : 'form-control login-input'">
+              <input type="email" required name="email" ng-model="usuario.email" ng-class="usuarioForm.$submitted && (usuarioForm.email.$error.required || usuarioForm.email.$error.email || usuarioForm.email.$error.pattern) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
             </div>
             <div class="col-md-4">
-              <label>*Teléfono</label>
+              <label>Teléfono</label>
             </div>
             <div class="col-md-8">
-              <input type="text" ng-model="usuario.telefono" name="telefono" class="form-control login-input">
+              <input type="text" ng-model="usuario.telefono" name="telefono" ng-class="usuarioForm.$submitted && usuarioForm.telefono.$error.pattern ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
             </div>
             <div class="col-md-4">
-              <label>*Dirección</label>
+              <label>Dirección</label>
             </div>
             <div class="col-md-8">
               <input type="text" ng-model="usuario.direccion" name="direccion" class="form-control login-input">
@@ -118,37 +118,37 @@
         <div class="row informacion">
           <div class="col-md-12">&nbsp;</div>          
           <div class="col-md-4">
-            <label>*R.U.T.</label>
+            <label>R.U.T.</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.rut" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Razon Social</label>
+            <label>Razon Social</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.razon" class="form-control login-input">
           </div> 
           <div class="col-md-4">
-            <label>*Giro</label>
+            <label>Giro</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.giro" class="form-control login-input">
           </div>                    
           <div class="col-md-4">
-            <label>*E-mail</label>
+            <label>E-mail</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.email" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Teléfono</label>
+            <label>Teléfono</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.telefono" class="form-control login-input">
           </div>
           <div class="col-md-4">
-            <label>*Dirección</label>
+            <label>Dirección</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.direccion" class="form-control login-input">
@@ -179,7 +179,7 @@
               <span style="font-size:80%;">Ej: 12345678-9 (sin puntos y con guión)</span>
             </div>
             <div class="col-md-4">
-              <label>*R.U.T.</label>
+              <label>R.U.T.</label>
             </div>
             <div class="col-md-8">
               <input rut name="rut" ng-model="usuario.rut" ng-class="(empresaForm.$submitted && empresaForm.rut.$error.rut) ? 'form-control login-input-wrong' : 'form-control login-input'">
@@ -188,10 +188,10 @@
               <label>*Razon Social</label>
             </div>
             <div class="col-md-8">
-              <input ng-model="usuario.razon" class="form-control login-input">
+              <input required ng-model="usuario.razon" name="razon" ng-class="empresaForm.$submitted && empresaForm.razon.$error.required ? 'form-control login-input-wrong' : 'form-control login-input'">
             </div> 
             <div class="col-md-4">
-              <label>*Giro</label>
+              <label>Giro</label>
             </div>
             <div class="col-md-8">
               <input ng-model="usuario.giro" class="form-control login-input">
@@ -200,16 +200,16 @@
               <label>*E-mail</label>
             </div>
             <div class="col-md-8">
-              <input type="email" name="email" ng-model="usuario.email" ng-class="(empresaForm.$submitted && empresaForm.email.$error.email) ? 'form-control login-input-wrong' : 'form-control login-input'">
+              <input type="email" required name="email" ng-model="usuario.email" ng-class="(empresaForm.$submitted && (empresaForm.email.$error.required || empresaForm.email.$error.email || empresaForm.email.$error.pattern)) ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="EMAIL_REGEXP">
             </div>
             <div class="col-md-4">
-              <label>*Teléfono</label>
+              <label>Teléfono</label>
             </div>
             <div class="col-md-8">
-              <input ng-model="usuario.telefono" class="form-control login-input">
+              <input ng-model="usuario.telefono" name="telefono" ng-class="empresaForm.$submitted &&  empresaForm.telefono.$error.pattern ? 'form-control login-input-wrong' : 'form-control login-input'" ng-pattern="TEL_REGEXP">
             </div>
             <div class="col-md-4">
-              <label>*Dirección</label>
+              <label>Dirección</label>
             </div>
             <div class="col-md-8">
               <input ng-model="usuario.direccion" class="form-control login-input">
@@ -242,7 +242,7 @@
             <td>TOTAL</td>              
             <td>&nbsp;</td>
           </tr>          
-          <tr ng-repeat="compra in compras">  
+          <tr ng-repeat="compra in compras | orderBy:'-_id'">  
            <td>            
                 {{compra._id}}              
             </td>             
@@ -327,7 +327,7 @@
             <td>N° PRODUCTOS</td>            
             <td>&nbsp;</td>
           </tr>          
-          <tr ng-repeat="cotizacion in cotizaciones">  
+          <tr ng-repeat="cotizacion in cotizaciones | orderBy:'-_id'">  
            <td style="padding: 8px 50px;">
               {{cotizacion._id}}
             </td>             

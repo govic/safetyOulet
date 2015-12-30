@@ -1,4 +1,4 @@
-<div class="alert alert-danger alerta" ng-show="(avisarmeForm.$submitted) && (avisarmeForm.avisarmeEmail.$error.required || avisarmeForm.avisarmeEmail.$error.email)">
+<div class="alert alert-danger alerta" ng-show="(avisarmeForm.$submitted) && (avisarmeForm.avisarmeEmail.$error.required || avisarmeForm.avisarmeEmail.$error.email || avisarmeForm.avisarmeEmail.$error.pattern)">
     <span style="font-size: 110%">Debe escribir un correo válido para realizar la suscripción.</span>
 </div>
 <div class="alert {{error ? 'alert-danger' : 'alert-success'}} alerta" ng-show="exito2 || error">
@@ -6,35 +6,35 @@
 </div>
 <loading></loading>
 <div class="container home top">
-    <div class="row">        
+    <div class="row">
         <div class="col-md-4">
             <div class="row imagen-detalle">
                 <div class="col-md-12">
-                    <img ng-show="{{foto_principal}}" src="assets/producto/{{foto_principal}}" width="100%"/>
+                    <img ng-show="{{foto_principal}}" src="assets/producto/{{foto_principal}}" width="100%" />
                 </div>
                 <div class="col-md-12">
                     <ul class="row">
                         <li class="col-md-4" ng-repeat="item in detalle.images">
-                            <img ng-show="{{item}}" src="assets/producto/small_{{item}}" ng-click="changePicture(item)" width="100%">                          
-                        </li>                       
+                            <img ng-show="item ? true : false" src="assets/producto/small_{{item}}" ng-click="changePicture(item)" width="100%">
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
-
         <div class="col-md-8">
             <div class="row descripcion-detalle">
                 <div class="col-md-12">
-                    <h4>{{ultimo.glosa_filtro | uppercase}}</h4> 
-                    <h2>{{detalle.nombre | uppercase}} </h2></div>
+                    <h4>{{ultimo.glosa_filtro | uppercase}}</h4>
+                    <h2>{{detalle.nombre | uppercase}}</h2>
+                </div>
                 <div class="col-md-6">
                     <div class="col-md-12 border-down">
                         <h3 style="margin-top:20px;">${{precio_formato}}</h3>
                     </div>
                     <ul>
-                        <li>{{detalle.descripcion}}</li>                        
+                        <li>{{detalle.descripcion}}</li>
                     </ul>
-                </div>                
+                </div>
                 <div class="col-md-6">
                     <div class="row add">
                         <div class="col-md-8- col-md-offset-2" style="margin-top:15px !important;">
@@ -43,11 +43,11 @@
                                     <p style="font-size: 80%; margin-bottom: 10px !important;">¿Quieres que te informemos cuando haya stock? Marca los productos e ingresa tu e-mail.
                                     </p>
                                     <div class="col-md-8" style="padding: 0px; margin-bottom: 15px;">
-                                        <input required name="avisarmeEmail" placeholder="Ingresa aquí tu e-mail" ng-model="correo" type="email" style="width: 100%; height: 29px; padding-left: 20px; font-size: 80%; border-radius: 4px; border:none; border: 1px solid grey;" >
+                                        <input required name="avisarmeEmail" placeholder="Ingresa aquí tu e-mail" ng-model="correo" type="email" style="width: 100%; height: 29px; padding-left: 20px; font-size: 80%; border-radius: 4px; border:none; border: 1px solid grey;" ng-pattern="EMAIL_REGEXP">
                                         </input>
                                     </div>
                                     <div ng-show="!correo_stock_loading" class="col-md-4" style="padding-right: 0px; margin-bottom: 15px;">
-                                        <input  type="submit" class="btn btn-add" value="AVISARME">
+                                        <input type="submit" class="btn btn-add" value="AVISARME">
                                     </div>
                                     <span class="text-center" ng-show="correo_stock_loading">
                                         <i style="font-size: 160%; margin-left: 50px; margin-top:2px;" class="fa fa-refresh fa-spin fa-2x">
@@ -57,7 +57,7 @@
                             </div>
                             <table class="detalle-table" ng-repeat="variante in detalle.variantes">
                                 <thead>
-                                     <tr>
+                                    <tr>
                                         <th>{{variante.nombre}}</th>
                                         <th>C&oacute;digo</th>
                                         <th>Stock</th>
@@ -81,11 +81,11 @@
                                             <input maxlength="4" value="0" ng-model="cantidad[$index]" min="0" type="number" style="width: 40px; height: 21px; color:black; font-size: 100%;"></input>
                                         </td>
                                         <td>
-                                            <input style="width: 12px; height: 12px;" ng-show="stock.stock === 0" ng-model="stocks_informar[$index]" type="checkbox" ></input>
+                                            <input style="width: 12px; height: 12px;" ng-show="stock.stock === 0" ng-model="stocks_informar[$index]" type="checkbox"></input>
                                         </td>
                                     </tr>
-                                </tbody>  
-                            </table>               
+                                </tbody>
+                            </table>
                             <div ng-if="!exito && !exito5" class="col-md-6">
                                 <input ng-click="addCarro(detalle, cantidad)" type="submit" class="btn btn-add" value="AGREGAR AL CARRO">
                             </div>
@@ -103,21 +103,18 @@
                 </div>
             </div>
         </div>
-        
-
         <div class="col-md-9">
-            <div class="row">
+            <div class="row" ng-if="primera_seccion.productos && primera_seccion.productos.length > 0">
                 <div class="col-md-12">
-                    <div class="row">                        
+                    <div class="row">
                         <div class="col-md-5">
                             <h3>{{primera_seccion.titulo | uppercase}}</h3>
                         </div>
                         <div class="col-md-7">
-                            <hr></hr>                    
+                            <hr></hr>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-12">
                     <div class="row destacados">
                         <div class="col-md-3" ng-repeat="producto in primera_seccion.productos">
@@ -140,15 +137,18 @@
                                 </ul>
                             </div>
                         </div>
-                    </div><!-- end seccion -->
+                    </div>
+                    <!-- end seccion -->
                 </div>
+            </div>
+            <div class="row" ng-if="segunda_seccion.productos && segunda_seccion.productos.length > 0">
                 <div class="col-md-12">
-                    <div class="row">                        
+                    <div class="row">
                         <div class="col-md-5">
                             <h3>{{segunda_seccion.titulo | uppercase}}</h3>
                         </div>
                         <div class="col-md-7">
-                            <hr></hr>                    
+                            <hr></hr>
                         </div>
                     </div>
                 </div>
@@ -174,15 +174,18 @@
                                 </ul>
                             </div>
                         </div>
-                    </div><!-- end seccion -->
+                    </div>
+                    <!-- end seccion -->
                 </div>
+            </div>
+            <div class="row" ng-if="tercera_seccion.productos && tercera_seccion.productos.length > 0">
                 <div class="col-md-12">
-                    <div class="row">                        
+                    <div class="row">
                         <div class="col-md-5">
                             <h3>{{tercera_seccion.titulo | uppercase}}</h3>
                         </div>
                         <div class="col-md-7">
-                            <hr></hr>                    
+                            <hr></hr>
                         </div>
                     </div>
                 </div>
@@ -208,7 +211,8 @@
                                 </ul>
                             </div>
                         </div>
-                    </div><!-- end seccion -->
+                    </div>
+                    <!-- end seccion -->
                 </div>
             </div>
         </div>
@@ -218,13 +222,14 @@
                     <ul>
                         <li ng-repeat="banner_secundario in banners_secundarios">
                             <img src="assets/bannerprincipal/{{banner_secundario.imagen}}">
-                        </li>                        
+                        </li>
                         <li>
                             <img src="assets/img/banner-lat5.jpg">
                         </li>
                     </ul>
                 </div>
             </div>
-        </div>                
+        </div>
     </div>
-</div>  <!-- end container home -->
+</div>
+<!-- end container home -->

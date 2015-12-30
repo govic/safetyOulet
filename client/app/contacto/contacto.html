@@ -8,17 +8,20 @@
         <div class="row contacto">
           <h3>CONTÁCTATE DIRECTAMENTE CON NOSOTROS</h3>
           <form name="contactoForm" novalidate ng-submit="!contactoForm.$invalid && contact()">
-            <div class="col-md-6">
+            <div class="col-md-7">
               <input required ng-model="contacto.nombre" name="nombre" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.nombre.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="NOMBRE">
-              <input required ng-model="contacto.email" name="email" type="email" ng-class="((contactoForm.$submitted) && (contactoForm.email.$error.required || contactoForm.email.$error.email)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="E-MAIL">
-              <input required ng-model="contacto.telefono" name="telefono" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.telefono.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="TELEFONO">
+              <input required ng-model="contacto.email" name="email" type="email" ng-class="((contactoForm.$submitted) && (contactoForm.email.$error.required || contactoForm.email.$error.email || contactoForm.email.$error.pattern)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="E-MAIL" ng-pattern="EMAIL_REGEXP">
+              <input required ng-model="contacto.telefono" name="telefono" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.telefono.$error.required || contactoForm.telefono.$error.pattern)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="TELEFONO" ng-pattern="TEL_REGEXP">
             </div>
-            <div class="col-md-3">              
+            <div class="col-md-5">              
               <input required ng-model="contacto.asunto" name="asunto" type="text" ng-class="((contactoForm.$submitted) && (contactoForm.asunto.$error.required)) ? 'form-control contacto-input-wrong' : 'form-control contacto-input'" placeholder="MOTIVO CONTACTO">
             </div>
-            <div class="col-md-9">
+            <div class="col-md-12">
               <textarea name="mensaje" ng-model="contacto.mensaje" required ng-class="((contactoForm.$submitted) && (contactoForm.mensaje.$error.required)) ? 'form-control contacto-textarea-wrong' : 'form-control contacto-textarea'" rows="3" placeholder="MENSAJE"></textarea>
-              <input ng-show="!loading" type="submit" class="btn btn-default" value="ENVIAR">
+            </div>
+            <div class="col-md-12">
+              <br>
+              <input ng-show="!loading" type="submit" class="btn btn-default" value="ENVIAR" style="">
               <div ng-show="loading" class="col-md-2 col-md-offset-9" style="margin-top:10px; padding-left: 75px;">
                   <i style="font-size:170%;" class="fa fa-refresh fa-spin fa-2x"></i>
               </div>

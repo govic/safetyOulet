@@ -29,7 +29,7 @@
 								<label>*EMAIL</label>
 							</div>
 							<div class="col-md-8 col-sm-7 col-xs-12">
-								<input class="form-control login-input" required name="correo" type="email" ng-class="((loginForm.$submitted) && (loginForm.correo.$error.required || loginForm.correo.$error.email)) ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.login.correo" />
+								<input class="form-control login-input" required name="correo" type="email" ng-class="((loginForm.$submitted) && (loginForm.correo.$error.required || loginForm.correo.$error.email || loginForm.correo.$error.pattern)) ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.login.correo" ng-pattern="EMAIL_REGEXP"/>
 							</div>
 						</div>
 						<!--password-->
@@ -149,7 +149,7 @@
 						<label class="form-label form-label-small">*TELEFONO</label>
 					</div>
 					<div class="col-md-8 col-sm-7 col-xs-12 margen-abajo-10">
-						<input class="form-control" required type="text" ng-class="usuario.errores.telefono ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.telefono" ng-blur="usuario.datos.validar()" />
+						<input class="form-control" required type="text" ng-class="usuario.errores.telefono ? 'usuario-input-wrong' : 'usuario-input'" ng-model="usuario.datos.telefono" ng-blur="usuario.datos.validar()"/>
 					</div>
 				</div>
 				<!--direccion-->

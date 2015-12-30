@@ -4,6 +4,7 @@
 se agrega codigo para funcionalidad proceso compra recortado
 
 */
+
 'use strict';
 
 angular.module('pruebaAngularApp', [
@@ -476,6 +477,21 @@ angular.module('pruebaAngularApp', [
 
 }])
 
+//directiva que se encarga de evaluar un metodo cuando sobre el elemento se presiona enter
+.directive('ngEnter', function() {
+  return function(scope, element, attrs) {
+    element.bind('keydown keypress', function(event) {
+      console.dir(event);
+      if (event.which === 13 && event.target.value && event.target.value.trim() !== '') {
+        scope.$apply(function() {
+          scope.$eval(attrs.ngEnter);
+        });
+        event.preventDefault();
+      }
+    });
+  };
+})
+
 .run(function($rootScope, $location, Auth, $localStorage) {
   // Redirect to login if route requires auth and you're not logged in
   $localStorage.$default({
@@ -495,4 +511,7 @@ angular.module('pruebaAngularApp', [
 })
 
 //define contantes globales
-.constant('constantes', {});
+.constant('CONSTANTES', {
+  EMAIL_REGEXP: /^[a-z0-9-_.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i,
+  TEL_REGEXP: /^[0-9-+()\s]+$/
+});
