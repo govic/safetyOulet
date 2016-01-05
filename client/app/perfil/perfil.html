@@ -22,7 +22,7 @@
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.name" class="form-control login-input">
-          </div>                    
+          </div>
           <div class="col-md-4">
             <label>E-mail</label>
           </div>
@@ -40,18 +40,18 @@
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.direccion" class="form-control login-input">
-          </div>                   
+          </div>
           <div class="col-md-6 col-md-offset-6">
             <input type="submit" class="btn btn-default" value="EDITAR DATOS" ng-click="editProfile()">
-          </div>                   
+          </div>
         </div>
-        <div style="padding-top:15px;">                                   
+        <div style="padding-top:15px;">
           <span style="font-size:80%;">Para cambiar su contraseña, haga click <a href="/cambiar_contrasena/{{_id}}">aquí</a>
           </span>
         </div>
       </div>
-    </div> 
-    <div class="col-md-12" ng-if="editar_perfil === true && usuario.role === 'user'" >
+    </div>
+    <div class="col-md-12" ng-if="editar_perfil === true && usuario.role === 'user'">
       <div class="col-md-4">
         <h3>EDITAR DATOS DE USUARIO</h3>
       </div>
@@ -59,7 +59,7 @@
         <hr></hr>
       </div>
       <div class="col-md-6">
-         <div class="row informacion">
+        <div class="row informacion">
           <form name="usuarioForm" novalidate ng-submit="!usuarioForm.$invalid && saveProfile()">
             <div class="col-md-12">&nbsp;</div>
             <div class="col-md-8 col-md-offset-4">
@@ -76,7 +76,7 @@
             </div>
             <div class="col-md-8">
               <input type="text" ng-model="usuario.name" name="nombre" required ng-class="usuarioForm.$submitted && usuarioForm.nombre.$error.required ? 'form-control login-input-wrong' : 'form-control login-input'">
-            </div>                    
+            </div>
             <div class="col-md-4">
               <label>*E-mail</label>
             </div>
@@ -94,19 +94,21 @@
             </div>
             <div class="col-md-8">
               <input type="text" ng-model="usuario.direccion" name="direccion" class="form-control login-input">
-            </div>                   
-            <div class="col-md-6 col-md-offset-6">
+            </div>
+            <div class="col-md-4 col-md-offset-8 col-sm-12 col-xs-12">
               <input type="submit" class="btn btn-default" value="EDITAR DATOS">
-            </div> 
-          </form>                  
+            </div>
+            <div class="col-md-12 text-right">
+              <a href ng-click="cancelEditProfile()">Cancelar</a>
+            </div>
+          </form>
         </div>
-        <div style="padding-top:15px;">                                   
+        <div style="padding-top:15px;">
           <span style="font-size:80%;">Para cambiar su contraseña, haga click <a href="/cambiar_contrasena/{{_id}}">aquí</a>
           </span>
         </div>
       </div>
     </div>
-
     <div class="col-md-12" ng-if="editar_perfil === false && usuario.role === 'enterprise'">
       <div class="col-md-3">
         <h3>DATOS DE EMPRESA</h3>
@@ -116,7 +118,7 @@
       </div>
       <div class="col-md-6">
         <div class="row informacion">
-          <div class="col-md-12">&nbsp;</div>          
+          <div class="col-md-12">&nbsp;</div>
           <div class="col-md-4">
             <label>R.U.T.</label>
           </div>
@@ -128,13 +130,13 @@
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.razon" class="form-control login-input">
-          </div> 
+          </div>
           <div class="col-md-4">
             <label>Giro</label>
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.giro" class="form-control login-input">
-          </div>                    
+          </div>
           <div class="col-md-4">
             <label>E-mail</label>
           </div>
@@ -152,18 +154,17 @@
           </div>
           <div class="col-md-8">
             <input disabled ng-model="usuario.direccion" class="form-control login-input">
-          </div>                   
+          </div>
           <div class="col-md-6 col-md-offset-6">
             <input type="submit" class="btn btn-default" value="EDITAR DATOS" ng-click="editProfile()">
-          </div>                   
+          </div>
         </div>
-        <div style="padding-top:15px;">                                   
+        <div style="padding-top:15px;">
           <span style="font-size:80%;">Para cambiar su contraseña, haga click <a href="/cambiar_contrasena/{{_id}}">aquí</a>
           </span>
         </div>
-      </div> 
-    </div> 
-
+      </div>
+    </div>
     <div class="col-md-12" ng-if="editar_perfil === true && usuario.role === 'enterprise'">
       <div class="col-md-4">
         <h3>EDITAR DATOS DE EMPRESA</h3>
@@ -189,13 +190,13 @@
             </div>
             <div class="col-md-8">
               <input required ng-model="usuario.razon" name="razon" ng-class="empresaForm.$submitted && empresaForm.razon.$error.required ? 'form-control login-input-wrong' : 'form-control login-input'">
-            </div> 
+            </div>
             <div class="col-md-4">
               <label>Giro</label>
             </div>
             <div class="col-md-8">
               <input ng-model="usuario.giro" class="form-control login-input">
-            </div>                    
+            </div>
             <div class="col-md-4">
               <label>*E-mail</label>
             </div>
@@ -213,47 +214,49 @@
             </div>
             <div class="col-md-8">
               <input ng-model="usuario.direccion" class="form-control login-input">
-            </div>                   
-            <div class="col-md-6 col-md-offset-6">
+            </div>
+            <div class="col-md-4 col-md-offset-8 col-sm-12 col-xs-12">
               <input type="submit" class="btn btn-default" value="EDITAR DATOS">
-            </div> 
-          </form>                  
+            </div>
+            <div class="col-md-12 text-right">
+              <a href ng-click="cancelEditProfile()">Cancelar</a>
+            </div>
+          </form>
         </div>
-        <div style="padding-top:15px;">                                   
+        <div style="padding-top:15px;">
           <span style="font-size:80%;">Para cambiar su contraseña, haga click <a href="/cambiar_contrasena/{{_id}}">aquí</a>
           </span>
         </div>
-      </div>       
-    </div>  
-
-    <div ng-if="compras.length !== 0" class="col-md-12">      
+      </div>
+    </div>
+    <div ng-if="compras.length !== 0" class="col-md-12">
       <div class="col-md-2">
         <h3>MIS COMPRAS</h3>
       </div>
       <div class="col-md-10">
-        <hr></hr>      
+        <hr></hr>
       </div>
       <div class="col-md-12">
-        <table class="table">           
+        <table class="table">
           <tr class="t-head">
             <td>N° DE COMPRA</td>
             <td>FECHA DE COMPRA</td>
-            <td>N° PRODUCTOS</td>                    
-            <td>TOTAL</td>              
+            <td>N° PRODUCTOS</td>
+            <td>TOTAL</td>
             <td>&nbsp;</td>
-          </tr>          
-          <tr ng-repeat="compra in compras | orderBy:'-_id'">  
-           <td>            
-                {{compra._id}}              
-            </td>             
+          </tr>
+          <tr ng-repeat="compra in compras | orderBy:'-_id'">
             <td>
-                {{compra.compra.fecha | date:'dd/MM/yyyy' : 'UTC'}}
-            </td>                    
-            <td>
-                {{compra.compra.cantidad_total}}
+              {{compra._id}}
             </td>
             <td>
-                {{compra.compra.precio_total_formato}}
+              {{compra.compra.fecha | date:'dd/MM/yyyy' : 'UTC'}}
+            </td>
+            <td>
+              {{compra.compra.cantidad_total}}
+            </td>
+            <td>
+              {{compra.compra.precio_total_formato}}
             </td>
             <td>
               <span ng-hide="compra.details">
@@ -262,8 +265,8 @@
               <span ng-show="compra.details">
                 <a href="#" ng-click="hideDetails(compra)" class="glyphicon glyphicon-minus custom_color"></a>
               </span>
-            </td>              
-          </tr>          
+            </td>
+          </tr>
         </table>
       </div>
       <div ng-show="mostrar_detalle">
@@ -271,17 +274,17 @@
           <h3>DETALLE COMPRA {{compra._id}}</h3>
         </div>
         <div class="col-md-9">
-          <hr></hr>      
-        </div> 
-        <div class="col-md-10 col-md-offset-1">       
-          <table class="table">            
+          <hr></hr>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+          <table class="table">
             <tr class="t-head">
               <td>PRODUCTO</td>
               <td>DESCRIPCIÓN</td>
               <td>PRECIO UNITARIO</td>
               <td>CANTIDAD</td>
-              <td>SUBTOTAL</td>                                      
-            </tr>            
+              <td>SUBTOTAL</td>
+            </tr>
             <tr ng-repeat="producto in detalle_compra.productos">
               <td>
                 <img src="{{producto.url_imagen}}" height="70">
@@ -293,7 +296,7 @@
                 <div ng-repeat="var in producto.variante">
                   {{var.nombre}}: {{var.opcion}}
                 </div>
-              </td>                    
+              </td>
               <td>
                 <span>{{producto.precio_unitario_formato}}
                 </span>
@@ -304,12 +307,12 @@
               <td>
                 <span>Subtotal: {{producto.precio_total_formato}}
                 </span>
-              </td>                    
+              </td>
             </tr>
-          </table>  
-        </div>  
+          </table>
+        </div>
       </div>
-    </div>    
+    </div>
     <br>
     <br>
     <div ng-if="cotizaciones.length !== 0" class="col-md-12">
@@ -317,23 +320,23 @@
         <h3>MIS COTIZACIONES</h3>
       </div>
       <div class="col-md-9">
-        <hr></hr>      
+        <hr></hr>
       </div>
       <div class="col-md-12">
         <table class="table">
           <tr class="t-head">
             <td>N° DE COTIZACIÓN</td>
             <td>FECHA DE COMPRA</td>
-            <td>N° PRODUCTOS</td>            
+            <td>N° PRODUCTOS</td>
             <td>&nbsp;</td>
-          </tr>          
-          <tr ng-repeat="cotizacion in cotizaciones | orderBy:'-_id'">  
-           <td style="padding: 8px 50px;">
+          </tr>
+          <tr ng-repeat="cotizacion in cotizaciones | orderBy:'-_id'">
+            <td style="padding: 8px 50px;">
               {{cotizacion._id}}
-            </td>             
+            </td>
             <td>
               {{cotizacion.cotizacion.fecha | date:'dd/MM/yyyy' : 'UTC'}}
-            </td>                    
+            </td>
             <td>
               {{cotizacion.cotizacion.cantidad_total}}
             </td>
@@ -344,24 +347,23 @@
               <span ng-show="cotizacion.details">
                 <a href="#" ng-click="hideDetailsCotizacion(cotizacion)" class="glyphicon glyphicon-minus custom_color"></a>
               </span>
-            </td>              
-          </tr>         
-        </table>         
+            </td>
+          </tr>
+        </table>
       </div>
-   
       <div ng-show="mostrar_detalle_c">
-         <div class="col-md-4">
+        <div class="col-md-4">
           <h3>DETALLE COTIZACION {{cotizacion._id}}</h3>
         </div>
         <div class="col-md-8">
-          <hr></hr>      
+          <hr></hr>
         </div>
-        <div class="col-md-10 col-md-offset-1">     
+        <div class="col-md-10 col-md-offset-1">
           <table class="table">
             <tr class="t-head">
               <td>PRODUCTO</td>
               <td>DESCRIPCIÓN</td>
-              <td>CANTIDAD</td>                                    
+              <td>CANTIDAD</td>
             </tr>
             <tr ng-repeat="producto in detalle_cotizacion.productos">
               <td>
@@ -372,17 +374,14 @@
                 <div ng-repeat="var in producto.variante">
                   {{var.nombre}}: {{var.opcion}}
                 </div>
-              </td> 
+              </td>
               <td>
                 {{producto.cantidad}}
-              </td>                             
-            </tr>        
-          </table>  
-        </div>  
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>   
-  </div>     
+    </div>
+  </div>
 </div>
- 
-
-

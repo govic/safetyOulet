@@ -45,6 +45,18 @@ angular.module('pruebaAngularApp').controller('PerfilCtrl', function($anchorScro
     $scope.editProfile = function() {
         $scope.editar_perfil = true;
     };
+
+    $scope.cancelEditProfile = function() {
+        $http.get('/api/users/me').success(function(user) {
+            $scope.usuario = user;
+        }).error(function(err){
+            console.error('error al cargar datos usuario');
+            console.error(err);
+        }).finally(function(){
+            $scope.editar_perfil = false;
+        });
+    };
+    
     $scope.saveProfile = function() {
         if ($scope.usuario.role === 'user') {
             $scope.mensajes_error = [];
